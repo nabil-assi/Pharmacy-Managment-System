@@ -30,7 +30,7 @@ router.get("/", async (req, res) => {
       ...sale,
       sale_date_formatted: formatDate(sale.sale_date),
       customer_name: sale.customer_name,
-      medicine_name: sale.medicine_name
+      medicine_name: sale.medicine_name,
     }));
 
     res.render("pages/main", {
@@ -60,4 +60,52 @@ router.get("/medicines", async (req, res) => {
     res.status(500).json({ error: "Database error" });
   }
 });
+
+router.get("/customers/:id", async (req, res) => {
+  const customerId = req.params.id;
+
+  try {
+    const [customerRows] = await db.query(
+      "SELECT * FROM customers WHERE id = ?",
+      [customerId]
+    );
+    const customer = customerRows[0];
+
+    if (!customer) {
+      return res.status(404).send("Customer not found");
+    }
+
+    const [sales] = await db.query(
+      `
+      SELECT 
+        sales.id,
+        sales.medicine_id,
+        sales.quantity,
+        sales.total_price,
+        sales.sale_date,
+        medicines.name AS medicine_name
+      FROM sales
+      JOIN medicines ON sales.medicine_id = medicines.id
+      WHERE sales.customer_id = ?
+    `,
+      [customerId]
+    );
+
+    const formattedSales = sales.map((sale) => ({
+      ...sale,
+      sale_date_formatted: formatDate(sale.sale_date),
+    }));
+
+    res.render("pages/customer", {
+      customer,
+      sales: formattedSales,
+      title: `Customer: ${customer.name}`,
+      url: req.url,
+    });
+  } catch (err) {
+    console.error("Error loading customer page:", err);
+    res.status(500).send("Server error");
+  }
+});
+
 module.exports = router;
