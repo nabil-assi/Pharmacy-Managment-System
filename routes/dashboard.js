@@ -37,7 +37,7 @@ router.get("/", async (req, res) => {
       medicines,
       customers,
       sales: formattedSales,
-      title: "Medicines",
+      title: "Dashboard",
       url: req.url,
     });
   } catch (err) {
@@ -48,13 +48,26 @@ router.get("/", async (req, res) => {
 
 router.get("/medicines", async (req, res) => {
   try {
-    const [rows] = await db.query("SELECT * FROM medicines");
-    // res.json(rows);
+    const [medicines] = await db.query(`
+      SELECT 
+        medicines.*,
+        categories.name AS category_name
+      FROM medicines
+      JOIN categories ON medicines.category_id = categories.id
+    `);
+
+    const formattedMedicines = medicines.map(med => ({
+      ...med,
+      expiry_date_formatted: formatDate(med.expiry_date),
+      category_name: med.category_name
+    }));
+
     res.render("pages/medicines", {
-      rows,
-      title: "Medicines List",
+      medicines: formattedMedicines,
+      title: "Medicines",
       url: req.url,
     });
+
   } catch (err) {
     console.error("Error fetching medicines:", err);
     res.status(500).json({ error: "Database error" });
