@@ -56,10 +56,10 @@ router.get("/medicines", async (req, res) => {
       JOIN categories ON medicines.category_id = categories.id
     `);
 
-    const formattedMedicines = medicines.map(med => ({
+    const formattedMedicines = medicines.map((med) => ({
       ...med,
       expiry_date_formatted: formatDate(med.expiry_date),
-      category_name: med.category_name
+      category_name: med.category_name,
     }));
 
     res.render("pages/medicines", {
@@ -67,7 +67,6 @@ router.get("/medicines", async (req, res) => {
       title: "Medicines",
       url: req.url,
     });
-
   } catch (err) {
     console.error("Error fetching medicines:", err);
     res.status(500).json({ error: "Database error" });
@@ -118,6 +117,98 @@ router.get("/customers/:id", async (req, res) => {
   } catch (err) {
     console.error("Error loading customer page:", err);
     res.status(500).send("Server error");
+  }
+});
+
+router.get("/customers", async (req, res) => {
+  try {
+    const [customers] = await db.query("SELECT * FROM customers");
+    res.render("pages/customers", {
+      title: "Customers",
+      customers,
+      url: req.url,
+    });
+  } catch (err) {
+    console.error("Error fetching customers:", err);
+    res.status(500).json({ error: "Database error" });
+  }
+});
+router.get("/sales", async (req, res) => {
+  try {
+    const [sales] = await db.query("SELECT * FROM sales");
+    res.render("pages/sales", {
+      title: "Sales",
+      sales,
+      url: req.url,
+    });
+  } catch (err) {
+    console.error("Error fetching sales:", err);
+    res.status(500).json({ error: "Database error" });
+  }
+});
+router.get("/categories", async (req, res) => {
+  try {
+    const [categories] = await db.query("SELECT * FROM categories");
+    res.render("pages/categories", {
+      title: "Categories",
+      categories,
+      url: req.url,
+    });
+  } catch (err) {
+    console.error("Error fetching categories:", err);
+    res.status(500).json({ error: "Database error" });
+  }
+});
+router.get("/pharmacists", async (req, res) => {
+  try {
+    const [pharmacists] = await db.query("SELECT * FROM pharmacists");
+    res.render("pages/pharmacists", {
+      title: "Pharmacists",
+      pharmacists,
+      url: req.url,
+    });
+  } catch (err) {
+    console.error("Error fetching pharmacists:", err);
+    res.status(500).json({ error: "Database error" });
+  }
+});
+router.get("/prescriptions", async (req, res) => {
+  try {
+    const [prescriptions] = await db.query("SELECT * FROM prescriptions");
+    res.render("pages/prescriptions", {
+      title: "Prescriptions",
+      prescriptions,
+      url: req.url,
+    });
+  } catch (err) {
+    console.error("Error fetching prescriptions:", err);
+    res.status(500).json({ error: "Database error" });
+  }
+});
+router.get("/batches", async (req, res) => {
+  try {
+    const [batches] = await db.query("SELECT * FROM batches");
+    res.render("pages/batches", {
+      title: "Batches",
+      batches,
+      url: req.url,
+    });
+  } catch (err) {
+    console.error("Error fetching batches:", err);
+    res.status(500).json({ error: "Database error" });
+  }
+});
+router.get("/settings", async (req, res) => {
+  try {
+    const [users] = await db.query("SELECT * FROM users");
+    res.render("pages/settings", {
+      title: "Settings",
+      users,
+      url: req.url,
+    });
+  } catch (err) {
+    console.error("Error fetching user:", err);
+    res.status(500).json({ error: "Database error" });
   }
 });
 
