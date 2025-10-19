@@ -1,0 +1,82 @@
+<!-- Main Content -->
+<div class="main-content">
+    <h4 class="mb-4">Overview</h4>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title"><i class="bi bi-capsule me-2"></i> Medicines</h6>
+                    <p class="card-text">Total in stock: <strong>
+                            <%= medicines.length %>
+                        </strong></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title"><i class="bi bi-people me-2"></i> Customers</h6>
+                    <p class="card-text">Registered: <strong>
+                            <%= customers.length %>
+                        </strong></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title"><i class="bi bi-receipt me-2"></i> Sales</h6>
+                    <% let totalSales=0; for (let i=0; i < sales.length; i++) { totalSales
+                        +=parseFloat(sales[i].total_price); } %>
+                        <p>This month: <strong>
+                                <%= totalSales.toFixed(2) %> $
+                            </strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-5">
+        <h5>Recent Sales</h5>
+        <table class="table table-bordered table-striped mt-3">
+            <thead class="table-light">
+                <tr>
+                    <th>id</th>
+                    <th>Customer</th>
+                    <th>Medicine</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Sale date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for( let i=0; i < sales.length; i++ ) { %>
+                    <tr>
+                        <td>
+                            <%= i+1 %>
+                        </td>
+
+                        <td> <a href="">
+                                <%= sales[i].customer_name %>
+                            </a> </td>
+                        <td>
+                            <%= sales[i].medicine_name %>
+                        </td>
+                        <td>
+                            <%= sales[i].quantity %>
+                        </td>
+                        <td>
+                            <%= sales[i].total_price + " $" %>
+                        </td>
+                        <td>
+                            <%= sales[i].sale_date_formatted %>
+                        </td>
+
+                    </tr>
+                    <% } %>
+
+
+            </tbody>
+        </table>
+    </div>
+</div>

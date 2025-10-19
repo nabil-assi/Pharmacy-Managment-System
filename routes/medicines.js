@@ -7,7 +7,11 @@ router.get("/", async (req, res) => {
   try {
     const [rows] = await db.query("SELECT * FROM medicines");
     // res.json(rows);
-    res.render('views/pages/medicines', {rows});
+    res.render('pages/medicines', {rows,
+      title: "Medicines List",
+      url: req.url
+
+    });
   } catch (err) {
     console.error("Error fetching medicines:", err);
     res.status(500).json({ error: "Database error" });
