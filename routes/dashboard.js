@@ -48,6 +48,7 @@ router.get("/", async (req, res) => {
 
 router.get("/medicines", async (req, res) => {
   try {
+    const [categories] = await db.query("SELECT * FROM categories");
     const [medicines] = await db.query(`
       SELECT 
         medicines.*,
@@ -62,10 +63,15 @@ router.get("/medicines", async (req, res) => {
       category_name: med.category_name,
     }));
 
+    const message = req.session.message;
+    delete req.session.message;
+
     res.render("pages/medicines", {
       medicines: formattedMedicines,
+      categories: categories,
       title: "Medicines",
       url: req.url,
+      message,
     });
   } catch (err) {
     console.error("Error fetching medicines:", err);
@@ -202,7 +208,7 @@ router.get("/pharmacists", async (req, res) => {
   }
 });
 router.get("/prescriptions", async (req, res) => {
- try {
+  try {
     const [prescriptions] = await db.query(`
       SELECT 
         prescriptions.*,
@@ -213,9 +219,9 @@ router.get("/prescriptions", async (req, res) => {
       JOIN pharmacists ON prescriptions.pharmacist_id = pharmacists.id
     `);
 
-    const formattedPrescriptions = prescriptions.map(p => ({
+    const formattedPrescriptions = prescriptions.map((p) => ({
       ...p,
-      created_at_formatted: formatDate(p.created_at)
+      created_at_formatted: formatDate(p.created_at),
     }));
 
     res.render("pages/prescriptions", {
@@ -223,20 +229,18 @@ router.get("/prescriptions", async (req, res) => {
       prescriptions: formattedPrescriptions,
       url: req.url,
     });
-
   } catch (err) {
     console.error("Error fetching prescriptions:", err);
     res.status(500).json({ error: "Database error" });
   }
-
 });
 router.get("/batches", async (req, res) => {
   try {
     const [batches] = await db.query("SELECT * FROM batches");
 
-    const formattedBatches = batches.map(batch => ({
+    const formattedBatches = batches.map((batch) => ({
       ...batch,
-      received_date_formatted: formatDate(batch.received_date)
+      received_date_formatted: formatDate(batch.received_date),
     }));
 
     res.render("pages/batches", {
@@ -244,14 +248,11 @@ router.get("/batches", async (req, res) => {
       batches: formattedBatches,
       url: req.url,
     });
-
   } catch (err) {
     console.error("Error fetching batches:", err);
     res.status(500).json({ error: "Database error" });
   }
 });
-
-
 
 router.get("/settings", async (req, res) => {
   try {

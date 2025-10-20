@@ -3,6 +3,7 @@ const path = require("path");
 const dotenv = require("dotenv");
 const expressLayouts = require("express-ejs-layouts"); 
 const app = express();
+const session = require('express-session');
 
 // Load environment variables
 dotenv.config();
@@ -20,11 +21,19 @@ app.set("layout", "templates/index");
 // Static files
 app.use(express.static(path.join(__dirname, "public")));
 
+
+app.use(session({
+  secret: process.env.JWT_SECRET,  
+  resave: false,
+  saveUninitialized: true
+}));
+
+
 // Routes
-// const medicinesRoutes = require("./routes/medicines");
+const medicinesRoutes = require("./routes/medicines");
 const dashboardRoutes = require("./routes/dashboard");
 app.use("/dashboard", dashboardRoutes);
-// app.use("/medicines", medicinesRoutes);
+app.use("/dashboard/medicines", medicinesRoutes);
 
 // Home route
 app.get("/", (req, res) => {
