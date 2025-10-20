@@ -230,20 +230,29 @@ router.get("/prescriptions", async (req, res) => {
   }
 
 });
-
 router.get("/batches", async (req, res) => {
   try {
     const [batches] = await db.query("SELECT * FROM batches");
+
+    const formattedBatches = batches.map(batch => ({
+      ...batch,
+      received_date_formatted: formatDate(batch.received_date)
+    }));
+
     res.render("pages/batches", {
       title: "Batches",
-      batches,
+      batches: formattedBatches,
       url: req.url,
     });
+
   } catch (err) {
     console.error("Error fetching batches:", err);
     res.status(500).json({ error: "Database error" });
   }
 });
+
+
+
 router.get("/settings", async (req, res) => {
   try {
     const [users] = await db.query("SELECT * FROM users");
