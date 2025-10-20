@@ -202,18 +202,35 @@ router.get("/pharmacists", async (req, res) => {
   }
 });
 router.get("/prescriptions", async (req, res) => {
-  try {
-    const [prescriptions] = await db.query("SELECT * FROM prescriptions");
+ try {
+    const [prescriptions] = await db.query(`
+      SELECT 
+        prescriptions.*,
+        customers.name AS customer_name,
+        pharmacists.name AS pharmacist_name
+      FROM prescriptions
+      JOIN customers ON prescriptions.customer_id = customers.id
+      JOIN pharmacists ON prescriptions.pharmacist_id = pharmacists.id
+    `);
+
+    const formattedPrescriptions = prescriptions.map(p => ({
+      ...p,
+      created_at_formatted: formatDate(p.created_at)
+    }));
+
     res.render("pages/prescriptions", {
       title: "Prescriptions",
-      prescriptions,
+      prescriptions: formattedPrescriptions,
       url: req.url,
     });
+
   } catch (err) {
     console.error("Error fetching prescriptions:", err);
     res.status(500).json({ error: "Database error" });
   }
+
 });
+
 router.get("/batches", async (req, res) => {
   try {
     const [batches] = await db.query("SELECT * FROM batches");
