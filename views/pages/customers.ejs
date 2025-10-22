@@ -1,49 +1,75 @@
 <!-- Main Content -->
 <div class="main-content">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4>Customer List</h4>
-        <button class="btn btn-primary"><i class="bi bi-plus-circle me-1"></i> Add Customer</button>
-    </div>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4>Customer List</h4>
+  </div>
 
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-            <thead class="table-light">
-                <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% for( let i=0; i < customers.length; i++ ) { %>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead class="table-light">
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for( let i=0; i < customers.length; i++ ) { %>
 
-                    <tr>
-                        <td>
-                            <%= i+1 %>
-                        </td>
-                        <td> <a href="/dashboard/customers/<%= customers[i].id %>">
-                                <%= customers[i].name %>
-                            </a></td>
-                        <td>
-                            <%= customers[i].email %>
-                        </td>
-                        <td>
-                            <%= customers[i].phone %>
-                        </td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary me-1" onclick="editCustomer(1)">
-                                <i class="bi bi-pencil-square"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-danger" onclick="deleteCustomer(1)">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <% } %>
+          <tr>
+            <td>
+              <%= i+1 %>
+            </td>
+            <td> <a href="/dashboard/customers/<%= customers[i].id %>">
+                <%= customers[i].name %>
+              </a></td>
+            <td>
+              <%= customers[i].email %>
+            </td>
+            <td>
+              <%= customers[i].phone %>
+            </td>
+            <td>
+              <button class="btn btn-sm btn-outline-primary me-1" onclick="editCustomer(1)">
+                <i class="bi bi-pencil-square"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+                data-bs-target="#deleteModal<%= customers[i].id %>">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
 
-            </tbody>
-        </table>
-    </div>
+            <div class="modal fade" id="deleteModal<%= customers[i].id %>" tabindex="-1"
+              aria-labelledby="deleteLabel<%= customers[i].id %>" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <form action="/dashboard/customers/delete/<%= customers[i].id %>" method="POST">
+                    <div class="modal-header bg-danger text-white">
+                      <h5 class="modal-title" id="deleteLabel<%= customers[i].id %>">Confirm deleting</h5>
+                      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <p>Are you sure for deleting this customer! <br>
+                        All the customer data, sales operation, prescriptions will be deleted too! <strong>
+                          <%= customers[i].name %>
+                        </strong>؟</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                      <button type="submit" class="btn btn-danger">Delete</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+          </tr>
+          <% } %>
+
+      </tbody>
+    </table>
+  </div>
 </div>

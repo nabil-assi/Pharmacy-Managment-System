@@ -1,32 +1,47 @@
 <div class="main-content">
 
-<h2>Customer: <%= customer.name %></h2>
-<p><strong>Email:</strong> <%= customer.email %></p>
-<p><strong>Phone:</strong> <%= customer.phone %></p>
+  <h2>Customer: <%= customer.name %>
+  </h2>
+  <p><strong>Email:</strong>
+    <%= customer.email %>
+  </p>
+  <p><strong>Phone:</strong>
+    <%= customer.phone %>
+  </p>
 
-<h3>Purchase History</h3>
-<table class="table table-bordered">
-  <thead>
-    <tr>
-      <th>#</th>
-      <th>Medicine</th>
-      <th>Quantity</th>
-      <th>Total Price</th>
-      <th>Date</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% for (let i = 0; i < sales.length; i++) { %>
+  <h3>Purchase History</h3>
+  <table class="table table-bordered">
+    <thead>
       <tr>
-        <td><%= i + 1 %></td>
-        <td><%= sales[i].medicine_name %></td>
-        <td><%= sales[i].quantity %></td>
-        <td><%= sales[i].total_price %></td>
-        <td><%= sales[i].sale_date_formatted %></td>
+        <th>#</th>
+        <th>Medicine</th>
+        <th>Quantity</th>
+        <th>Total Price</th>
+        <th>Date</th>
       </tr>
-    <% } %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% for (let i=0; i < sales.length; i++) { %>
+        <tr>
+          <td>
+            <%= i + 1 %>
+          </td>
+          <td>
+            <%= sales[i].medicine_name %>
+          </td>
+          <td>
+            <%= sales[i].quantity %>
+          </td>
+          <td>
+            <%= sales[i].total_price %>
+          </td>
+          <td>
+            <%= sales[i].sale_date_formatted %>
+          </td>
+        </tr>
+        <% } %>
+    </tbody>
+  </table>
 
 
 </div>

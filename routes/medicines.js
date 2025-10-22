@@ -27,7 +27,6 @@ router.post("/delete/:id", async (req, res) => {
   try {
     await db.query("DELETE FROM medicines WHERE id = ?", [medicineId]);
 
- 
     req.session.message = {
       type: "danger",
       text: "Medicine deleted successfully!",
