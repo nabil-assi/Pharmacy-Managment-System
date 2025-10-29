@@ -1,4 +1,4 @@
-<!-- Main Content -->
+<!-- views/dashboard/customers.ejs -->
 <div class="main-content">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h4>Customer List</h4>
@@ -16,15 +16,16 @@
         </tr>
       </thead>
       <tbody>
-        <% for( let i=0; i < customers.length; i++ ) { %>
-
+        <% for (let i=0; i < customers.length; i++) { %>
           <tr>
             <td>
-              <%= i+1 %>
+              <%= i + 1 %>
             </td>
-            <td> <a href="/dashboard/customers/<%= customers[i].id %>">
+            <td>
+              <a href="/dashboard/customers/<%= customers[i].id %>">
                 <%= customers[i].name %>
-              </a></td>
+              </a>
+            </td>
             <td>
               <%= customers[i].email %>
             </td>
@@ -32,43 +33,97 @@
               <%= customers[i].phone %>
             </td>
             <td>
-              <button class="btn btn-sm btn-outline-primary me-1" onclick="editCustomer(1)">
+              <!-- Edit Button -->
+              <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal"
+                data-bs-target="#editCustomerModal<%= customers[i].id %>">
                 <i class="bi bi-pencil-square"></i>
               </button>
+
+              <!-- Delete Button -->
               <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
                 data-bs-target="#deleteModal<%= customers[i].id %>">
                 <i class="bi bi-trash"></i>
               </button>
             </td>
+          </tr>
 
-            <div class="modal fade" id="deleteModal<%= customers[i].id %>" tabindex="-1"
-              aria-labelledby="deleteLabel<%= customers[i].id %>" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <form action="/dashboard/customers/delete/<%= customers[i].id %>" method="POST">
-                    <div class="modal-header bg-danger text-white">
-                      <h5 class="modal-title" id="deleteLabel<%= customers[i].id %>">Confirm deleting</h5>
-                      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                      <p>Are you sure for deleting this customer! <br>
-                        All the customer data, sales operation, prescriptions will be deleted too! <strong>
-                          <%= customers[i].name %>
-                        </strong>؟</p>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                      <button type="submit" class="btn btn-danger">Delete</button>
-                    </div>
-                  </form>
-                </div>
+          <!-- Delete Modal -->
+          <div class="modal fade" id="deleteModal<%= customers[i].id %>" tabindex="-1"
+            aria-labelledby="deleteLabel<%= customers[i].id %>" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <form action="/dashboard/customers/delete/<%= customers[i].id %>" method="POST">
+                  <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="deleteLabel<%= customers[i].id %>">Confirm Deletion</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                      aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <p>Are you sure you want to delete <strong>
+                        <%= customers[i].name %>
+                      </strong>? <br>
+                      All related sales and prescriptions will be deleted too!</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                  </div>
+                </form>
               </div>
             </div>
+          </div>
 
-          </tr>
+          <!-- Edit Customer Modal -->
+          <div class="modal fade" id="editCustomerModal<%= customers[i].id %>" tabindex="-1"
+            aria-labelledby="editCustomerLabel<%= customers[i].id %>" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <form action="/dashboard/customers/update" method="POST">
+                  <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="editCustomerLabel<%= customers[i].id %>">
+                      Edit Customer: <%= customers[i].name %>
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                      aria-label="Close"></button>
+                  </div>
+
+                  <div class="modal-body">
+                    <input type="hidden" name="id" value="<%= customers[i].id %>">
+
+                    <div class="mb-3">
+                      <label for="name<%= customers[i].id %>" class="form-label">Name</label>
+                      <input type="text" id="name<%= customers[i].id %>" name="name" class="form-control"
+                        value="<%= customers[i].name %>" required>
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="email<%= customers[i].id %>" class="form-label">Email</label>
+                      <input type="email" id="email<%= customers[i].id %>" name="email" class="form-control"
+                        value="<%= customers[i].email %>" required>
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="phone<%= customers[i].id %>" class="form-label">Phone</label>
+                      <input type="text" id="phone<%= customers[i].id %>" name="phone" class="form-control"
+                        value="<%= customers[i].phone %>" required>
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="address<%= customers[i].id %>" class="form-label">Address</label>
+                      <input type="text" id="address<%= customers[i].id %>" name="address" class="form-control"
+                        value="<%= customers[i].address %>" required>
+                    </div>
+                  </div>
+
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
           <% } %>
-
       </tbody>
     </table>
   </div>

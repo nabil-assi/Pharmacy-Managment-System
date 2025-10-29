@@ -23,4 +23,27 @@ router.post("/delete/:id", async (req, res) => {
   }
 });
 
+router.post("/update", async (req, res) => {
+  const { id, name, email, phone, address} = req.body;
+
+  try {
+    await db.query(
+      "UPDATE customers SET name = ?, email = ?, phone = ?, address = ? WHERE id = ?",
+      [name, email, phone, address, id]
+    );
+
+    req.session.message = {
+      type: "success",
+      text: `Customer '${name}' updated successfully!`,
+    };
+    res.redirect("/dashboard/customers");
+  } catch (err) {
+    console.error("Error updating customer:", err);
+    req.session.message = {
+      type: "danger",
+      text: "Error updating customer. Please try again.",
+    };
+    res.redirect("/dashboard/customers");
+  }
+});
 module.exports = router;
