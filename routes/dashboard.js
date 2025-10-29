@@ -7,8 +7,15 @@ router.get("/", async (req, res) => {
   try {
     const [medicines] = await db.query("SELECT * FROM medicines");
     const [customers] = await db.query("SELECT * FROM customers");
-    const [sales] = await db.query("SELECT * FROM sales");
-
+    const [sales] = await db.query(`
+    SELECT
+        *
+    FROM
+        sales
+    ORDER BY
+        sale_date DESC, id DESC
+    LIMIT 5;
+`);
     for (let i = 0; i < sales.length; i++) {
       const customerId = sales[i].customer_id;
       const medicineId = sales[i].medicine_id;
@@ -283,13 +290,13 @@ const message = req.session.message;
 
 router.get("/settings", async (req, res) => {
   try {
-    const [users] = await db.query("SELECT * FROM users");
+    const pharmacy = await db.query("SELECT * FROM pharmacy");
     const message = req.session.message;
     delete req.session.message;
 
     res.render("pages/settings", {
       title: "Settings",
-      users,
+      pharmacy,
       url: req.url,
       message
     });

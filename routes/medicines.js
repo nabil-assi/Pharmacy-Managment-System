@@ -37,5 +37,28 @@ router.post("/delete/:id", async (req, res) => {
     res.status(500).json({ error: "Database error" });
   }
 });
+router.post("/update", async (req, res) => {
+  const { id, name, category_id, price, quantity, expiry_date } = req.body;
+
+  try {
+    await db.query(
+      "UPDATE medicines SET name = ?, category_id = ?, price = ?, quantity = ?, expiry_date = ? WHERE id = ?",
+      [name, category_id, price, quantity, expiry_date, id]
+    );
+
+    req.session.message = {
+      type: "success",
+      text: `Medicine '${name}' updated successfully!`,
+    };
+    res.redirect("/dashboard/medicines");
+  } catch (err) {
+    console.error("Error updating medicine:", err);
+    req.session.message = {
+      type: "danger",
+      text: "Error updating medicine. Please try again.",
+    };
+    res.redirect("/dashboard/medicines");
+  }
+});
 
 module.exports = router;

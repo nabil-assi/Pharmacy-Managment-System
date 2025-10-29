@@ -1,36 +1,39 @@
+<!-- Main Content -->
+<div class="main-content">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4>Medicine Categories</h4>
+    <button class="btn btn-primary"><i class="bi bi-plus-circle me-1"></i> Add Category</button>
+  </div>
 
-      <!-- Main Content -->
-      <div class="main-content">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-          <h4>Medicine Categories</h4>
-          <button class="btn btn-primary"><i class="bi bi-plus-circle me-1"></i> Add Category</button>
-        </div>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead class="table-light">
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for( let i=0; i < categories.length; i++ ) { %>
 
-        <div class="table-responsive">
-          <table class="table table-bordered table-striped">
-            <thead class="table-light">
-              <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-                <% for( let i = 0; i < categories.length; i++ ) { %>
-                
-              <tr>
-                <td><%= i+1  %></td>
-                <td><%= categories[i].name  %></td>
-                <td>
-                  <button class="btn btn-sm btn-outline-primary me-1" onclick="editCategory(1)">
-                    <i class="bi bi-pencil-square"></i>
-                  </button>
-                 
-                </td>
-              </tr>
-                               <% } %>
+          <tr>
+            <td>
+              <%= i+1 %>
+            </td>
+            <td>
+              <%= categories[i].name %>
+            </td>
+            <td>
+              <button class="btn btn-sm btn-outline-primary me-1" onclick="editCategory(1)">
+                <i class="bi bi-pencil-square"></i>
+              </button>
 
-            </tbody>
-          </table>
-        </div>
-      </div>
+            </td>
+          </tr>
+          <% } %>
+
+      </tbody>
+    </table>
+  </div>
+</div>

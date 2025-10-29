@@ -2,14 +2,16 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
 
-
-
-
 router.post("/delete/:id", async (req, res) => {
   const customerId = req.params.id;
   try {
+    // await db.query("DELETE FROM prescriptions WHERE customer_id = ?", [customerId]);
+    // await db.query("DELETE FROM customers WHERE id = ?", [customerId]);
     await db.query("DELETE FROM customers WHERE id = ?", [customerId]);
 
+
+//delete o,z from orders 
+// as o join customers AS c ON o.id = c.customer_id where o.id = 123
     req.session.message = {
       type: "danger",
       text: "Customer deleted successfully!",
@@ -17,14 +19,8 @@ router.post("/delete/:id", async (req, res) => {
     res.redirect("/dashboard/customers");
   } catch (err) {
     console.error("Error deleting customer:", err);
-    res.status(500).json({ error: "Database error : " + err});
+    res.status(500).json({ error: "Database error : " + err });
   }
 });
-
-
-
-
-
-
 
 module.exports = router;

@@ -1,0 +1,40 @@
+=> Dashboard
+[♥]- Main dashboard 'Recent Sales' Table.
+[♥]- Link the cards title to their pages.
+
+=> Medicine
+[♥]- Medicine edit.
+ 
+=> Customers
+[ ]- Customers delete issue.
+[ ]- Customers edit.
+[ ]- Customers Email sent "contact".
+ 
+=> Sales
+[ ]- Sale add.
+[ ]- Sale edit.
+[ ]- Sale report.
+[ ]- Add "Three days before" to the table.
+
+=> Categories
+[ ]- Add category.
+[ ]- Edit category.
+
+=> Pharmacist
+[ ]- Add pharmacist.
+[ ]- Edit pharmacist.
+ 
+ 
+=> Prescription 
+[ ]- Add Prescription .
+[ ]- Edit Prescription .
+[ ]- Report Prescription .
+
+=> Batches 
+[ ]- Add Batch.
+[ ]- Edit Batch.
+[ ]- Delete Batch.
+[ ]- Report Batch.
+
+=> Setting page
+=> NAv bar 

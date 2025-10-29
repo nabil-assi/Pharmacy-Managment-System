@@ -5,17 +5,25 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
-                    <h6 class="card-title"><i class="bi bi-capsule me-2"></i> Medicines</h6>
+                    <a href="/dashboard/medicines">
+                        <h6 class="card-title"><i class="bi bi-capsule me-2"></i> Medicines</h6>
+                    </a>
+
                     <p class="card-text">Total in stock: <strong>
                             <%= medicines.length %>
                         </strong></p>
+
                 </div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
-                    <h6 class="card-title"><i class="bi bi-people me-2"></i> Customers</h6>
+                    <a href="/dashboard/customers">
+
+                        <h6 class="card-title"><i class="bi bi-people me-2"></i> Customers</h6>
+                    </a>
+
                     <p class="card-text">Registered: <strong>
                             <%= customers.length %>
                         </strong></p>
@@ -25,7 +33,11 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
+                                        <a href="/dashboard/sales">
+
                     <h6 class="card-title"><i class="bi bi-receipt me-2"></i> Sales</h6>
+                                        </a>
+
                     <% let totalSales=0; for (let i=0; i < sales.length; i++) { totalSales
                         +=parseFloat(sales[i].total_price); } %>
                         <p>This month: <strong>
