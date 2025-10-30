@@ -21,26 +21,26 @@ router.post("/delete/:id", async (req, res) => {
 });
 
 router.post("/update", async (req, res) => {
-  const { id, name, email, phone, address } = req.body;
+  const { id, name } = req.body;
 
   try {
     await db.query(
-      "UPDATE customers SET name = ?, email = ?, phone = ?, address = ? WHERE id = ?",
-      [name, email, phone, address, id]
+      "UPDATE categories SET name = ? WHERE id = ?",
+      [name, id]
     );
 
     req.session.message = {
       type: "success",
-      text: `Customer '${name}' updated successfully!`,
+      text: `Category '${name}' updated successfully!`,
     };
-    res.redirect("/dashboard/customers");
+    res.redirect("/dashboard/categories");
   } catch (err) {
-    console.error("Error updating customer:", err);
+    console.error("Error updating category:", err);
     req.session.message = {
       type: "danger",
-      text: "Error updating customer. Please try again.",
+      text: "Error updating category. Please try again.",
     };
-    res.redirect("/dashboard/customers");
+    res.redirect("/dashboard/categories");
   }
 });
 router.post("/add", async (req, res) => {
