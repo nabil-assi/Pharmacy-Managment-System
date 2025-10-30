@@ -55,22 +55,21 @@ router.get("/", async (req, res) => {
     res.status(500).json({ error: "Database error" });
   }
 });
-
 router.get("/medicines", async (req, res) => {
   try {
     const [categories] = await db.query("SELECT * FROM categories");
+
     const [medicines] = await db.query(`
       SELECT 
-        medicines.*,
-        categories.name AS category_name
-      FROM medicines
-      JOIN categories ON medicines.category_id = categories.id
+        m.*, 
+        c.name AS category_name
+      FROM medicines m
+      LEFT JOIN categories c ON m.category_id = c.id
     `);
 
     const formattedMedicines = medicines.map((med) => ({
       ...med,
       expiry_date_formatted: formatDate(med.expiry_date),
-      category_name: med.category_name,
     }));
 
     const message = req.session.message;
@@ -88,6 +87,7 @@ router.get("/medicines", async (req, res) => {
     res.status(500).json({ error: "Database error" });
   }
 });
+
 
 router.get("/customers/:id", async (req, res) => {
   const customerId = req.params.id;
