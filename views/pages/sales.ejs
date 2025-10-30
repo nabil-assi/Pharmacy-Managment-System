@@ -1,8 +1,9 @@
-<!-- Main Content -->
 <div class="main-content">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h4>Sales Records</h4>
-    <button class="btn btn-primary"><i class="bi bi-plus-circle me-1"></i> Add Sale</button>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSaleModal">
+      <i class="bi bi-plus-circle me-1"></i> Add Sale
+    </button>
   </div>
 
   <div class="table-responsive">
@@ -21,24 +22,35 @@
         <% for( let i=0; i < sales.length; i++ ) { %>
 
           <tr>
-            <td><%= sales[i].sale_date_formatted %></td>
-            <td> <a href="/dashboard/customers/<%= sales[i].customer_id %>">
-              <%= sales[i].customer_name %>
-            </a> </td>
-            <td><%= sales[i].medicine_name %></td>
-            <td><%= sales[i].quantity %></td>
-            <td>$<%= sales[i].total_price %></td>
             <td>
-               
+              <%= sales[i].sale_date_formatted %>
+            </td>
+            <td> <a href="/dashboard/customers/<%= sales[i].customer_id %>">
+                <%= sales[i].customer_name %>
+              </a> </td>
+            <td>
+              <%= sales[i].medicine_name %>
+            </td>
+            <td>
+              <%= sales[i].quantity %>
+            </td>
+            <td>$<%= sales[i].total_price %>
+            </td>
+          <td>
+              <a href="/dashboard/sales/print/<%= sales[i].id %>" target="_blank"
+                 class="btn btn-sm btn-outline-info me-1" title="Print Report">
+                 <i class="bi bi-printer"></i>
+              </a>
+
               <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
-                data-bs-target="#deleteModal<%= sales[i].id %>">
+                data-bs-target="#deleteModal<%= sales[i].id %>" title="Delete Sale">
                 <i class="bi bi-trash"></i>
               </button>
             </td>
 
-            
+
             <div class="modal fade" id="deleteModal<%= sales[i].id %>" tabindex="-1"
-              aria-labelledby="deleteLabel<%= customers[i].id %>" aria-hidden="true">
+              aria-labelledby="deleteLabel<%= sales[i].id %>" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <form action="/dashboard/sales/delete/<%= sales[i].id%>" method="POST">
@@ -68,5 +80,71 @@
 
       </tbody>
     </table>
+  </div>
+
+  <div class="modal fade" id="addSaleModal" tabindex="-1" aria-labelledby="addSaleLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <form action="/dashboard/sales/add" method="POST">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addSaleLabel">Add New Sale</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <div class="modal-body">
+            <fieldset class="mb-4 p-3 border rounded">
+              <legend class="float-none w-auto px-2 fs-6">
+                Select Customer
+                <a href="/dashboard/customers/add" class="ms-3 badge text-bg-primary text-decoration-none">
+                  <i class="bi bi-person-plus me-1"></i> Create New
+                </a>
+              </legend>
+
+              <div id="existingCustomerFields" class="mt-1">
+                <label for="customer_id" class="form-label visually-hidden">Customer</label>
+                <select name="customer_id" id="customer_id" class="form-select" required>
+                  <option value="" disabled selected>Choose Existing Customer...</option>
+                  <% if (typeof customers !=='undefined' ) { %>
+                    <% customers.forEach(customer=> { %>
+                      <option value="<%= customer.id %>">
+                        <%= customer.name %>
+                      </option>
+                      <% }) %>
+                        <% } %>
+                </select>
+              </div>
+            </fieldset>
+            <fieldset class="p-3 border rounded">
+              <legend class="float-none w-auto px-2 fs-6">Medicine Details</legend>
+              <div class="row g-3">
+                <div class="col-md-8">
+                  <label for="medicine_id" class="form-label">Medicine</label>
+                  <select name="medicine_id" id="medicine_id" class="form-select" required>
+                    <option value="" disabled selected>Choose Medicine...</option>
+                    <% if (typeof medicines !=='undefined' ) { %>
+                      <% medicines.forEach(med=> { %>
+                        <option value="<%= med.id %>">
+                          <%= med.name %> (Stock: <%= med.quantity %>)
+                        </option>
+                        <% }) %>
+                          <% } %>
+                  </select>
+                </div>
+
+                <div class="col-md-4">
+                  <label for="quantity" class="form-label">Quantity</label>
+                  <input type="number" name="quantity" id="quantity" class="form-control" min="1" required>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary">Complete Sale</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </div>

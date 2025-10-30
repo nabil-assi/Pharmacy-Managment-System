@@ -46,4 +46,21 @@ router.post("/update", async (req, res) => {
     res.redirect("/dashboard/customers");
   }
 });
+router.post("/add", async (req, res) => {
+  const { name, phone, email, address} = req.body;
+  try {
+    const [result] = await db.query(
+      "INSERT INTO customers (name, phone, email, address) VALUES (?, ?, ?, ?)",
+      [name, phone, email, address]
+    );
+     req.session.message = {
+      type: "success",
+      text: "Customer added successfully!",
+    };
+    res.redirect("/dashboard/customers");
+  } catch (err) {
+    console.error("Error adding customers:", err);
+    res.status(500).json({ error: "Database error" });
+  }
+});
 module.exports = router;

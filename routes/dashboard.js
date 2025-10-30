@@ -149,7 +149,7 @@ router.get("/customers", async (req, res) => {
       title: "Customers",
       customers,
       url: req.url,
-      message
+      message,
     });
   } catch (err) {
     console.error("Error fetching customers:", err);
@@ -185,7 +185,7 @@ router.get("/sales", async (req, res) => {
       customer_name: sale.customer_name,
       medicine_name: sale.medicine_name,
     }));
-const message = req.session.message;
+    const message = req.session.message;
     delete req.session.message;
 
     res.render("pages/sales", {
@@ -194,7 +194,7 @@ const message = req.session.message;
       sales: formattedSales,
       title: "Dashboard",
       url: req.url,
-      message
+      message,
     });
   } catch (err) {
     console.error("Error fetching dashboard data:", err);
@@ -211,7 +211,7 @@ router.get("/categories", async (req, res) => {
       title: "Categories",
       categories,
       url: req.url,
-      message
+      message,
     });
   } catch (err) {
     console.error("Error fetching categories:", err);
@@ -228,7 +228,7 @@ router.get("/pharmacists", async (req, res) => {
       title: "Pharmacists",
       pharmacists,
       url: req.url,
-      message
+      message,
     });
   } catch (err) {
     console.error("Error fetching pharmacists:", err);
@@ -258,7 +258,7 @@ router.get("/prescriptions", async (req, res) => {
       title: "Prescriptions",
       prescriptions: formattedPrescriptions,
       url: req.url,
-      message
+      message,
     });
   } catch (err) {
     console.error("Error fetching prescriptions:", err);
@@ -273,14 +273,14 @@ router.get("/batches", async (req, res) => {
       ...batch,
       received_date_formatted: formatDate(batch.received_date),
     }));
-const message = req.session.message;
+    const message = req.session.message;
     delete req.session.message;
 
     res.render("pages/batches", {
       title: "Batches",
       batches: formattedBatches,
       url: req.url,
-      message
+      message,
     });
   } catch (err) {
     console.error("Error fetching batches:", err);
@@ -298,7 +298,7 @@ router.get("/settings", async (req, res) => {
       title: "Settings",
       pharmacy,
       url: req.url,
-      message
+      message,
     });
   } catch (err) {
     console.error("Error fetching user:", err);
