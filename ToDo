@@ -23,19 +23,9 @@
 
 => Pharmacist
 [♥]- Add pharmacist.
-[ ]- Edit pharmacist.
+[♥]- Edit pharmacist.
  
  
-=> Prescription 
-[ ]- Add Prescription .
-[ ]- Edit Prescription .
-[ ]- Report Prescription .
-
-=> Batches 
-[ ]- Add Batch.
-[ ]- Edit Batch.
-[ ]- Delete Batch.
-[ ]- Report Batch.
 
 => Setting page
 => NAv bar 

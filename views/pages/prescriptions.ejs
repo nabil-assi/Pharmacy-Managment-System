@@ -43,14 +43,14 @@
               <button class="btn btn-sm btn-outline-primary me-1" onclick="editPrescription(1)">
                 <i class="bi bi-pencil-square"></i>
               </button>
-                 <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+              <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
                 data-bs-target="#deleteModal<%= prescriptions[i].id %>">
                 <i class="bi bi-trash"></i>
               </button>
             </td>
 
 
-                        
+
             <div class="modal fade" id="deleteModal<%= prescriptions[i].id %>" tabindex="-1"
               aria-labelledby="deleteLabel<%= prescriptions[i].id %>" aria-hidden="true">
               <div class="modal-dialog">

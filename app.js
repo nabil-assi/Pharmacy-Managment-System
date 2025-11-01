@@ -4,7 +4,6 @@ const dotenv = require("dotenv");
 const expressLayouts = require("express-ejs-layouts");
 const app = express();
 const session = require("express-session");
-
 // Load environment variables
 dotenv.config();
 
@@ -16,7 +15,8 @@ app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(expressLayouts);
-app.set("layout", "templates/index");
+// app.set("layout", "templates/index");
+// app.set("layout", "templates/loginTemplate");
 
 // Static files
 app.use(express.static(path.join(__dirname, "public")));
@@ -25,7 +25,8 @@ app.use(
   session({
     secret: process.env.JWT_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
+    cookie: { maxAge: 1000 * 60 * 60 },  
   })
 );
 
@@ -37,6 +38,7 @@ const salesRoutes = require("./routes/sales");
 const medicinesRoutes = require("./routes/medicines");
 const customersRoutes = require("./routes/customers");
 const dashboardRoutes = require("./routes/dashboard");
+const loginRoutes = require("./routes/login");
 app.use("/dashboard", dashboardRoutes);
 app.use("/dashboard/medicines", medicinesRoutes);
 app.use("/dashboard/customers", customersRoutes);
@@ -44,6 +46,7 @@ app.use("/dashboard/sales", salesRoutes);
 app.use("/dashboard/prescriptions", prescriptionsRoutes);
 app.use("/dashboard/categories", categoriesRoutes);
 app.use("/dashboard/staff", staffRoutes);
+app.use("/login", loginRoutes);
 
 // Home route
 app.get("/", (req, res) => {

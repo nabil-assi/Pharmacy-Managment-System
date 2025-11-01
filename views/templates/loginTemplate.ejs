@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+        <%= title %>
+    </title>
+
+    <link rel="stylesheet" href="../../bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../bootstrap-icons/font/bootstrap-icons.css">
+    <script src="../../bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .login-card {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 420px;
+            padding: 2rem;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+
+<body>
+                <%- body %>
+
+    <% if (typeof message !=='undefined' && message) { %>
+        <div class="container position-fixed top-0 start-50 translate-middle-x mt-3"
+            style="z-index: 1055; max-width: 600px;">
+            <div class="alert alert-<%= message.type %> d-flex align-items-center shadow-sm border-0 alert-dismissible fade show"
+                role="alert">
+                <i
+                    class="bi <%= message.type === 'success' ? 'bi-check-circle-fill' : message.type === 'danger' ? 'bi-x-circle-fill' : 'bi-info-circle-fill' %> me-2 fs-5"></i>
+                <div>
+                    <%= message.text %>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+        <% } %>
+</body>
+
+</html>

@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
 const { formatDate } = require("../utils/helper");
-
-router.get("/", async (req, res) => {
+const { authMiddleware } = require("../middleware/auth");
+router.get("/", authMiddleware(), async (req, res) => {
   try {
     const [medicines] = await db.query("SELECT * FROM medicines");
     const [customers] = await db.query("SELECT * FROM customers");
@@ -49,13 +49,15 @@ router.get("/", async (req, res) => {
       title: "Dashboard",
       url: req.url,
       message,
+      layout: "templates/index",
+      req,
     });
   } catch (err) {
     console.error("Error fetching dashboard data:", err);
     res.status(500).json({ error: "Database error" });
   }
 });
-router.get("/medicines", async (req, res) => {
+router.get("/medicines", authMiddleware(), async (req, res) => {
   try {
     const [categories] = await db.query("SELECT * FROM categories");
 
@@ -81,6 +83,8 @@ router.get("/medicines", async (req, res) => {
       title: "Medicines",
       url: req.url,
       message,
+      layout: "templates/index",
+      req,
     });
   } catch (err) {
     console.error("Error fetching medicines:", err);
@@ -88,8 +92,7 @@ router.get("/medicines", async (req, res) => {
   }
 });
 
-
-router.get("/customers/:id", async (req, res) => {
+router.get("/customers/:id", authMiddleware(), async (req, res) => {
   const customerId = req.params.id;
 
   try {
@@ -132,6 +135,8 @@ router.get("/customers/:id", async (req, res) => {
       title: `Customer: ${customer.name}`,
       url: req.url,
       message,
+      layout: "templates/index",
+      req,
     });
   } catch (err) {
     console.error("Error loading customer page:", err);
@@ -139,7 +144,7 @@ router.get("/customers/:id", async (req, res) => {
   }
 });
 
-router.get("/customers", async (req, res) => {
+router.get("/customers", authMiddleware(), async (req, res) => {
   try {
     const [customers] = await db.query("SELECT * FROM customers");
     const message = req.session.message;
@@ -150,13 +155,15 @@ router.get("/customers", async (req, res) => {
       customers,
       url: req.url,
       message,
+      layout: "templates/index",
+      req,
     });
   } catch (err) {
     console.error("Error fetching customers:", err);
     res.status(500).json({ error: "Database error" });
   }
 });
-router.get("/sales", async (req, res) => {
+router.get("/sales", authMiddleware(), async (req, res) => {
   try {
     const [medicines] = await db.query("SELECT * FROM medicines");
     const [customers] = await db.query("SELECT * FROM customers");
@@ -195,13 +202,15 @@ router.get("/sales", async (req, res) => {
       title: "Dashboard",
       url: req.url,
       message,
+      layout: "templates/index",
+      req,
     });
   } catch (err) {
     console.error("Error fetching dashboard data:", err);
     res.status(500).json({ error: "Database error" });
   }
 });
-router.get("/categories", async (req, res) => {
+router.get("/categories", authMiddleware(), async (req, res) => {
   try {
     const [categories] = await db.query("SELECT * FROM categories");
     const message = req.session.message;
@@ -212,13 +221,15 @@ router.get("/categories", async (req, res) => {
       categories,
       url: req.url,
       message,
+      layout: "templates/index",
+      req,
     });
   } catch (err) {
     console.error("Error fetching categories:", err);
     res.status(500).json({ error: "Database error" });
   }
 });
-router.get("/stuff", async (req, res) => {
+router.get("/staff", authMiddleware(), async (req, res) => {
   try {
     const [stuff] = await db.query("SELECT * FROM staff");
     const message = req.session.message;
@@ -229,22 +240,24 @@ router.get("/stuff", async (req, res) => {
       stuff,
       url: req.url,
       message,
+      layout: "templates/index",
+      req,
     });
   } catch (err) {
     console.error("Error fetching pharmacists:", err);
     res.status(500).json({ error: "Database error" });
   }
 });
-router.get("/prescriptions", async (req, res) => {
+router.get("/prescriptions", authMiddleware(), async (req, res) => {
   try {
     const [prescriptions] = await db.query(`
       SELECT 
         prescriptions.*,
         customers.name AS customer_name,
-        pharmacists.name AS pharmacist_name
+        staff.name AS pharmacist_name
       FROM prescriptions
       JOIN customers ON prescriptions.customer_id = customers.id
-      JOIN pharmacists ON prescriptions.pharmacist_id = pharmacists.id
+      JOIN staff ON prescriptions.pharmacist_id = staff.id
     `);
 
     const formattedPrescriptions = prescriptions.map((p) => ({
@@ -259,13 +272,15 @@ router.get("/prescriptions", async (req, res) => {
       prescriptions: formattedPrescriptions,
       url: req.url,
       message,
+      layout: "templates/index",
+      req,
     });
   } catch (err) {
     console.error("Error fetching prescriptions:", err);
     res.status(500).json({ error: "Database error" });
   }
 });
-router.get("/batches", async (req, res) => {
+router.get("/batches", authMiddleware(), async (req, res) => {
   try {
     const [batches] = await db.query("SELECT * FROM batches");
 
@@ -281,6 +296,8 @@ router.get("/batches", async (req, res) => {
       batches: formattedBatches,
       url: req.url,
       message,
+      layout: "templates/index",
+      req,
     });
   } catch (err) {
     console.error("Error fetching batches:", err);
@@ -288,21 +305,52 @@ router.get("/batches", async (req, res) => {
   }
 });
 
-router.get("/settings", async (req, res) => {
+router.get("/settings", authMiddleware(), async (req, res) => {
   try {
     const pharmacy = await db.query("SELECT * FROM pharmacy");
+
     const message = req.session.message;
     delete req.session.message;
-
+    // console.log(pharmacy[0]);
     res.render("pages/settings", {
       title: "Settings",
-      pharmacy,
+      pharmacy: pharmacy[0],
       url: req.url,
       message,
+      layout: "templates/index",
+      req,
     });
   } catch (err) {
     console.error("Error fetching user:", err);
     res.status(500).json({ error: "Database error" });
+  }
+});
+router.get("/profile", authMiddleware(), async (req, res) => {
+  try {
+    const userId = req.session.user.id;
+    const message = req.session.message;
+    delete req.session.message;
+    const [rows] = await db.query(
+      "SELECT name, email, gender, phone FROM staff WHERE id = ?",
+      [userId]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).send("User not found");
+    }
+
+    const user = rows[0];
+    res.render("pages/profile", {
+      title: "Profile",
+      user,
+      message,
+      url: req.url,
+      req,
+      layout: "templates/index",
+    });
+  } catch (err) {
+    console.error("Error loading profile:", err);
+    res.status(500).send("Server error");
   }
 });
 

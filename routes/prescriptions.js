@@ -2,9 +2,6 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
 
-
-
-
 router.post("/delete/:id", async (req, res) => {
   const prescriptions = req.params.id;
   try {
@@ -17,12 +14,8 @@ router.post("/delete/:id", async (req, res) => {
     res.redirect("/dashboard/prescriptions");
   } catch (err) {
     console.error("Error deleting prescriptions:", err);
-    res.status(500).json({ error: "Database error : " + err});
+    res.status(500).json({ error: "Database error : " + err });
   }
 });
-
-
-
-
 
 module.exports = router;
