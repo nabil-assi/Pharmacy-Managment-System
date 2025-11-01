@@ -218,15 +218,15 @@ router.get("/categories", async (req, res) => {
     res.status(500).json({ error: "Database error" });
   }
 });
-router.get("/pharmacists", async (req, res) => {
+router.get("/stuff", async (req, res) => {
   try {
-    const [pharmacists] = await db.query("SELECT * FROM pharmacists");
+    const [stuff] = await db.query("SELECT * FROM staff");
     const message = req.session.message;
     delete req.session.message;
 
-    res.render("pages/pharmacists", {
+    res.render("pages/staff", {
       title: "Pharmacists",
-      pharmacists,
+      stuff,
       url: req.url,
       message,
     });

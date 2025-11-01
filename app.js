@@ -30,6 +30,7 @@ app.use(
 );
 
 // Routes
+const staffRoutes = require("./routes/staff");
 const prescriptionsRoutes = require("./routes/prescriptions");
 const categoriesRoutes = require("./routes/categories");
 const salesRoutes = require("./routes/sales");
@@ -42,6 +43,7 @@ app.use("/dashboard/customers", customersRoutes);
 app.use("/dashboard/sales", salesRoutes);
 app.use("/dashboard/prescriptions", prescriptionsRoutes);
 app.use("/dashboard/categories", categoriesRoutes);
+app.use("/dashboard/staff", staffRoutes);
 
 // Home route
 app.get("/", (req, res) => {
