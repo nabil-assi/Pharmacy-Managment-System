@@ -4,7 +4,7 @@ const db = require("../config/db");
 const { formatDate } = require("../utils/helper");
 const { authMiddleware } = require("../middleware/auth");
 
-router.post("/delete/:id", authMiddleware("Admin"), async (req, res) => {
+router.post("/delete/:id", authMiddleware("admin"), async (req, res) => {
   const staffId = req.params.id;
   try {
     await db.query("DELETE FROM staff WHERE id = ?", [staffId]);
@@ -20,12 +20,13 @@ router.post("/delete/:id", authMiddleware("Admin"), async (req, res) => {
   }
 });
 
-router.post("/update", authMiddleware("Admin"), async (req, res) => {
-  const { id, name, email, gender, phone, password, role } = req.body;
+router.post("/update", authMiddleware("admin"), async (req, res) => {
+  const { id, name, email, gender, phone, password, is_active, role } =
+    req.body;
 
   let query =
-    "UPDATE staff SET name = ?, email = ?, gender = ?, phone = ?, role = ?";
-  let params = [name, email, gender, phone, role];
+    "UPDATE staff SET name = ?, email = ?, gender = ?, is_active=?, phone = ?, role = ?";
+  let params = [name, email, gender, is_active, phone, role];
 
   if (password) {
     query += ", password = ?";
@@ -52,7 +53,7 @@ router.post("/update", authMiddleware("Admin"), async (req, res) => {
     res.redirect("/dashboard/staff");
   }
 });
-router.post("/add", authMiddleware("Admin"), async (req, res) => {
+router.post("/add", authMiddleware("admin"), async (req, res) => {
   const { name, email, gender, phone, password, role, is_active } = req.body;
   try {
     await db.query(

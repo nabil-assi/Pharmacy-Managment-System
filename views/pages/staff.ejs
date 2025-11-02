@@ -14,6 +14,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Role</th>
+                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -32,6 +33,13 @@
                         <td>
                             <%= stuff[i].role %>
                         </td>
+                        <td class="p-2 fw-bold text-center align-middle">
+                            <span
+                                class="<%= stuff[i].is_active == 1 ? 'badge bg-success text-white' : 'badge bg-danger text-white' %>">
+                                <%= stuff[i].is_active==1 ? 'Active' : 'Inactive' %>
+                            </span>
+                        </td>
+
                         <td>
                             <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal"
                                 data-bs-target="#editStaffModal<%= stuff[i].id %>">
