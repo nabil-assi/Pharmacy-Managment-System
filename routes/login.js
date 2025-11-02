@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
 const bcrypt = require("bcrypt");
+const crypto = require("crypto");
+
+const { sendEmail } = require("../helper/emailHelper");
 
 router.get("/", async (req, res) => {
   try {
@@ -66,12 +69,77 @@ router.post("/check-login", async (req, res) => {
 
 router.get("/forgot-password", async (req, res) => {
   try {
+    const message = req.session.message;
+    delete req.session.message;
     res.render("pages/login/forgot-password", {
       title: "Forgot-Password",
       layout: "templates/loginTemplate",
+      message,
     });
   } catch (err) {
     console.error("Error loading customer page:", err);
+    res.status(500).send("Server error");
+  }
+});
+router.post("/forgot-password", async (req, res) => {
+  try {
+    const { email } = req.body;
+    // console.log("Forgot password request for email:", email);
+
+    if (!email) {
+      req.session.message = {
+        type: "error",
+        text: "Please enter your email!",
+      };
+      return res.redirect("/login/forgot-password");
+    }
+
+    const [rows] = await db.query("SELECT * FROM staff WHERE email = ?", [
+      email,
+    ]);
+
+    if (rows.length === 0) {
+      req.session.message = {
+        type: "error",
+        text: "No account found with that email!",
+      };
+      return res.redirect("/login/forgot-password");
+    }
+
+    const token = crypto.randomBytes(32).toString("hex");
+    const expires = new Date(Date.now() + 3600000);
+
+    await db.query(
+      "UPDATE staff SET reset_token=?, reset_expires=? WHERE email=?",
+      [token, expires, email]
+    );
+    const port = process.env.PORT;
+    const resetLink = `http://localhost:${port}/login/reset-password/${token}`;
+    const html = `
+      <h3>Password Reset Request</h3>
+      <p>Click below to reset your password:</p>
+      <a href="${resetLink}">${resetLink}</a>
+      <p>This link will expire in 1 hour.</p>
+    `;
+
+    const sent = await sendEmail(email, "Reset your password", html);
+
+    if (!sent) {
+      console.error("Failed to send email to", email);
+      req.session.message = {
+        type: "error",
+        text: "Error sending reset email. Try again later.",
+      };
+      return res.redirect("/login/forgot-password");
+    }
+
+    req.session.message = {
+      type: "success",
+      text: "Reset link sent! Check your email!",
+    };
+    res.redirect("/login/send-email");
+  } catch (err) {
+    console.error("Forgot password error:", err);
     res.status(500).send("Server error");
   }
 });
@@ -86,15 +154,95 @@ router.get("/send-email", async (req, res) => {
     res.status(500).send("Server error");
   }
 });
-router.get("/reset-password", async (req, res) => {
+router.get("/reset-password/:token", async (req, res) => {
+  const resetToken = req.params.token;
+
   try {
+    const [rows] = await db.query(
+      "SELECT * FROM staff WHERE reset_token = ? AND reset_expires > NOW()",
+      [resetToken]
+    );
+
+    if (rows.length === 0) {
+      req.session.message = {
+        type: "error",
+        text: "token is invalid or has expired.",
+      };
+      return res.redirect("/login/forgot-password");
+    }
+
     res.render("pages/login/reset-password", {
       title: "Reset Password",
       layout: "templates/loginTemplate",
+      token: resetToken,
     });
   } catch (err) {
-    console.error("Error loading customer page:", err);
-    res.status(500).send("Server error");
+    console.error("Error loading reset password page:", err);
+    req.session.message = {
+      type: "error",
+      text: "Something went wrong. Please try again later.",
+    };
+    res.status(500).redirect("/login");
+  }
+});
+
+router.post("/change-password/", async (req, res) => {
+  const { token, newPassword, confirmPassword } = req.body;
+
+  try {
+    if (!newPassword || !confirmPassword || !token) {
+      req.session.message = {
+        type: "error",
+        text: "Please fill up all boxes! ",
+      };
+      console.log("Missing fields in change password request");
+      return res.redirect(`/reset-password/${token}`);
+    }
+
+    if (newPassword !== confirmPassword) {
+            console.log("unmatched passwords");
+
+      req.session.message = {
+        type: "error",
+        text: "Unmatched Passwords! Please try again.",
+      };
+      return res.redirect(`/reset-password/${token}`);
+    }
+
+    const [rows] = await db.query(
+      "SELECT id FROM staff WHERE reset_token = ? AND reset_expires > NOW()",
+      [token]
+    );
+
+    if (rows.length === 0) {
+      req.session.message = {
+        type: "error",
+        text: "Invalid token or token has expired.",
+      };
+      return res.redirect("/login/forgot-password");
+    }
+
+    const staffId = rows[0].id;
+
+     const hashedPassword = await bcrypt.hash(newPassword, 10);  
+
+     await db.query(
+      "UPDATE staff SET password = ?, reset_token = NULL, reset_expires = NULL WHERE id = ?",
+      [hashedPassword, staffId]
+    );
+
+     req.session.message = {
+      type: "success",
+      text: "password changed successfully! You can now log in with your new password.",
+    };
+    return res.redirect("/login");
+  } catch (error) {
+    console.error("Error changing password:", error);
+    req.session.message = {
+      type: "error",
+      text: "internal server error. Please try again later.",
+    };
+    return res.status(500).redirect(`/reset-password/${token}`);
   }
 });
 router.get("/logout", (req, res) => {
