@@ -353,5 +353,31 @@ router.get("/profile", authMiddleware(), async (req, res) => {
     res.status(500).send("Server error");
   }
 });
+router.post("/profile", authMiddleware(), async (req, res) => {
+  try {
+    const userId = req.session.user.id;
+    const { name, email, gender, phone, password } = req.body;
+
+    let query = "UPDATE staff SET name=?, email=?, gender=?, phone=?";
+    const params = [name, email, gender, phone];
+
+    if (password && password.trim() !== "") {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      query += ", password=?";
+      params.push(hashedPassword);
+    }
+
+    query += " WHERE id=?";
+    params.push(userId);
+
+    await db.query(query, params);
+
+    // console.log(`User ${email} updated their profile`);
+    res.redirect("/profile");
+  } catch (err) {
+    console.error("Error updating profile:", err);
+    res.status(500).send("Server error");
+  }
+});
 
 module.exports = router;

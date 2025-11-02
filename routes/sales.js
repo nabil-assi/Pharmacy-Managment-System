@@ -89,7 +89,7 @@ router.get("/print/:id", async (req, res) => {
     }
 
     // Render without layout
-    res.render("pages/print", {
+    res.render("pages/printSale", {
       pharmacy: pharmacy[0] ,
       sale: sale[0] ,
       customer: customer[0],

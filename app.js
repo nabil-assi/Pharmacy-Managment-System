@@ -25,8 +25,8 @@ app.use(
   session({
     secret: process.env.JWT_SECRET,
     resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: 1000 * 60 * 60 },  
+    saveUninitialized: true,
+    // cookie: { maxAge: 1000 * 60 * 60 },  
   })
 );
 

@@ -35,6 +35,11 @@
               <%= customers[i].phone %>
             </td>
             <td>
+              <a href="/dashboard/customers/print/<%= customers[i].id %>" target="_blank"
+                class="btn btn-sm btn-outline-info me-1" title="Print Report">
+                <i class="bi bi-printer"></i>
+              </a>
+
               <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal"
                 data-bs-target="#editCustomerModal<%= customers[i].id %>">
                 <i class="bi bi-pencil-square"></i>
@@ -130,7 +135,6 @@
       </tbody>
     </table>
   </div>
-  ---
 
   <div class="modal fade" id="addCustomerModal" tabindex="-1" aria-labelledby="addCustomerLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">

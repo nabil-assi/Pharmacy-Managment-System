@@ -9,9 +9,8 @@ router.post("/delete/:id", async (req, res) => {
     // await db.query("DELETE FROM customers WHERE id = ?", [customerId]);
     await db.query("DELETE FROM customers WHERE id = ?", [customerId]);
 
-
-//delete o,z from orders 
-// as o join customers AS c ON o.id = c.customer_id where o.id = 123
+    //delete o,z from orders
+    // as o join customers AS c ON o.id = c.customer_id where o.id = 123
     req.session.message = {
       type: "danger",
       text: "Customer deleted successfully!",
@@ -24,7 +23,7 @@ router.post("/delete/:id", async (req, res) => {
 });
 
 router.post("/update", async (req, res) => {
-  const { id, name, email, phone, address} = req.body;
+  const { id, name, email, phone, address } = req.body;
 
   try {
     await db.query(
@@ -47,13 +46,13 @@ router.post("/update", async (req, res) => {
   }
 });
 router.post("/add", async (req, res) => {
-  const { name, phone, email, address} = req.body;
+  const { name, phone, email, address } = req.body;
   try {
     const [result] = await db.query(
       "INSERT INTO customers (name, phone, email, address) VALUES (?, ?, ?, ?)",
       [name, phone, email, address]
     );
-     req.session.message = {
+    req.session.message = {
       type: "success",
       text: "Customer added successfully!",
     };
@@ -61,6 +60,40 @@ router.post("/add", async (req, res) => {
   } catch (err) {
     console.error("Error adding customers:", err);
     res.status(500).json({ error: "Database error" });
+  }
+});
+router.get("/print/:id", async (req, res) => {
+  const customerId = req.params.id;
+  try {
+    const [pharmacy] = await db.query(`select * from pharmacy`);
+    const [sale] = await db.query(`select * from sales WHERE customer_id = ?`, [
+      customerId,
+    ]);
+
+    const [customer] = await db.query(`select * from customers WHERE id = ?`, [
+      [customerId],
+    ]);
+    const [medicine] = await db.query(`select * from medicines WHERE id = ?`, [
+      sale[0].medicine_id,
+    ]);
+
+    if (!sale) {
+      return res.status(404).send("Sale not found");
+    }
+
+    // Render without layout
+    res.render("pages/printCustomerSales", {
+      pharmacy: pharmacy[0],
+      sale: sale[0],
+      customer: customer[0],
+      medicine: medicine[0],
+      title: `Sale Report - ID: ${customerId}`,
+      url: req.url,
+      layout: false,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server error");
   }
 });
 module.exports = router;

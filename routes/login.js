@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
 const bcrypt = require("bcrypt");
- 
+
 router.get("/", async (req, res) => {
   try {
     const message = req.session.message;
@@ -44,11 +44,12 @@ router.post("/check-login", async (req, res) => {
       };
       return res.redirect("/login");
     }
-     req.session.user = {
+    req.session.user = {
       id: user.id,
       name: user.name,
       email: user.email,
-      role: user.role
+      is_active: user.is_active,
+      role: user.role,
     };
 
     req.session.message = {
@@ -94,6 +95,17 @@ router.get("/reset-password", async (req, res) => {
   } catch (err) {
     console.error("Error loading customer page:", err);
     res.status(500).send("Server error");
+  }
+});
+router.get("/logout", (req, res) => {
+  if (req.session.user) {
+    console.log(`User "${req.session.user.email}" logged out`);
+    req.session.destroy((err) => {
+      if (err) console.error("Error destroying session:", err);
+      res.redirect("/login");
+    });
+  } else {
+    res.redirect("/login");
   }
 });
 
