@@ -13,42 +13,137 @@
     <script src="../../bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
         body {
-            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #e0f7f1, #c8f1e4);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: 'Poppins', sans-serif;
+            position: relative;
+            overflow: hidden;
         }
 
-        .login-card {
-            background: #fff;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        /* خلفية ناعمة بأيقونات طبية */
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                url('https://cdn-icons-png.flaticon.com/512/2966/2966327.png'),
+                url('https://cdn-icons-png.flaticon.com/512/2966/2966325.png'),
+                url('https://cdn-icons-png.flaticon.com/512/2966/2966333.png');
+            background-repeat: no-repeat;
+            background-position: 5% 15%, 95% 20%, 50% 90%;
+            background-size: 60px, 60px, 70px;
+            opacity: 0.07;
+            z-index: 0;
+        }
+
+        .pharma-card {
+            position: relative;
+            z-index: 1;
             width: 100%;
-            max-width: 420px;
-            padding: 2rem;
-            transition: all 0.3s ease-in-out;
+            max-width: 430px;
+            background: #ffffffd9;
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 2.5rem;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .login-card:hover {
+        .pharma-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .pharma-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .pharma-header i {
+            font-size: 3rem;
+            color: #16a34a;
+            margin-bottom: 0.5rem;
+        }
+
+        .pharma-header h2 {
+            font-weight: 700;
+            color: #0f5132;
+            letter-spacing: 0.5px;
+        }
+
+        .form-control {
+            background: #f1fdf7;
+            border: 1px solid #c3e6cb;
+            border-radius: 12px;
+            padding: 0.8rem 1rem;
+            color: #0f5132;
+            transition: 0.2s;
+        }
+
+        .form-control:focus {
+            background: #ffffff;
+            border-color: #16a34a;
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.25);
+        }
+
+        .btn-pharma {
+            background: linear-gradient(135deg, #16a34a, #22c55e);
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-weight: 600;
+            padding: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .btn-pharma:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(34, 197, 94, 0.4);
+        }
+
+        /* تنبيه محسّن */
+        .custom-alert {
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(22, 163, 74, 0.3);
+            color: #14532d;
+            font-weight: 500;
+        }
+
+        .footer-text {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #5e7a6a;
+            margin-top: 1rem;
         }
     </style>
 </head>
 
 <body>
-                <%- body %>
+
+    <div class="pharma-card">
+
+          
+        <%- body %>
+
+
+             
+    </div>
 
     <% if (typeof message !=='undefined' && message) { %>
         <div class="container position-fixed top-0 start-50 translate-middle-x mt-3"
             style="z-index: 1055; max-width: 600px;">
-            <div class="alert alert-<%= message.type %> d-flex align-items-center shadow-sm border-0 alert-dismissible fade show"
+            <div class="alert alert-<%= message.type %> custom-alert d-flex align-items-center shadow-sm alert-dismissible fade show"
                 role="alert">
                 <i
-                    class="bi <%= message.type === 'success' ? 'bi-check-circle-fill' : message.type === 'danger' ? 'bi-x-circle-fill' : 'bi-info-circle-fill' %> me-2 fs-5"></i>
+                    class="bi <%= message.type === 'success' ? 'bi-check-circle-fill text-success' : message.type === 'danger' ? 'bi-x-circle-fill text-danger' : 'bi-info-circle-fill text-primary' %> me-2 fs-5"></i>
                 <div>
                     <%= message.text %>
                 </div>
@@ -56,6 +151,7 @@
             </div>
         </div>
         <% } %>
+
 </body>
 
 </html>

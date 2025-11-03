@@ -1,14 +1,14 @@
 <div class="main-content">
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h4>Customer List</h4>
-    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCustomerModal">
+    <h4 class="fw-bold text-dark">Customer List</h4>
+    <button class="btn btn-pharma d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#addCustomerModal">
       <i class="bi bi-plus-circle me-1"></i> Add Customer
     </button>
   </div>
 
-  <div class="table-responsive">
-    <table class="table table-bordered table-striped">
-      <thead class="table-light">
+  <div class="table-responsive shadow-sm rounded bg-white p-3">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-success text-dark">
         <tr>
           <th>#</th>
           <th>Name</th>
@@ -19,158 +19,122 @@
       </thead>
       <tbody>
         <% for (let i=0; i < customers.length; i++) { %>
-          <tr>
-            <td>
-              <%= i + 1 %>
-            </td>
-            <td>
-              <a href="/dashboard/customers/<%= customers[i].id %>">
-                <%= customers[i].name %>
-              </a>
-            </td>
-            <td>
-              <%= customers[i].email %>
-            </td>
-            <td>
-              <%= customers[i].phone %>
-            </td>
-            <td>
-              <a href="/dashboard/customers/print/<%= customers[i].id %>" target="_blank"
-                class="btn btn-sm btn-outline-info me-1" title="Print Report">
-                <i class="bi bi-printer"></i>
-              </a>
+        <tr>
+          <td><%= i + 1 %></td>
+          <td>
+            <a href="/dashboard/customers/<%= customers[i].id %>" class="text-success text-decoration-none">
+              <%= customers[i].name %>
+            </a>
+          </td>
+          <td><%= customers[i].email %></td>
+          <td><%= customers[i].phone %></td>
+          <td>
+            <a href="/dashboard/customers/print/<%= customers[i].id %>" target="_blank" class="btn btn-sm btn-outline-info me-1" title="Print Report">
+              <i class="bi bi-printer"></i>
+            </a>
+            <button class="btn btn-sm btn-outline-success me-1" data-bs-toggle="modal" data-bs-target="#editCustomerModal<%= customers[i].id %>">
+              <i class="bi bi-pencil-square"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-danger me-1" data-bs-toggle="modal" data-bs-target="#deleteModal<%= customers[i].id %>">
+              <i class="bi bi-trash"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-primary" onclick="window.location.href='mailto:<%= customers[i].email %>?subject=Hello <%= customers[i].name %>&body=Dear <%= customers[i].name %>,'">
+              <i class="bi bi-envelope-fill"></i>
+            </button>
+          </td>
+        </tr>
 
-              <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal"
-                data-bs-target="#editCustomerModal<%= customers[i].id %>">
-                <i class="bi bi-pencil-square"></i>
-              </button>
-
-              <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
-                data-bs-target="#deleteModal<%= customers[i].id %>">
-                <i class="bi bi-trash"></i>
-              </button>
-
-              <button class="btn btn-sm btn-outline-success"
-                onclick="window.location.href='mailto:<%= customers[i].email %>?subject=Hello <%= customers[i].name %>&body=Dear <%= customers[i].name %>,'">
-                <i class="bi bi-envelope-fill"></i>
-              </button>
-            </td>
-          </tr>
-
-          <div class="modal fade" id="deleteModal<%= customers[i].id %>" tabindex="-1"
-            aria-labelledby="deleteLabel<%= customers[i].id %>" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <form action="/dashboard/customers/delete/<%= customers[i].id %>" method="POST">
-                  <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title" id="deleteLabel<%= customers[i].id %>">Confirm Deletion</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                      aria-label="Close"></button>
+        <!-- Edit Modal -->
+        <div class="modal fade" id="editCustomerModal<%= customers[i].id %>" tabindex="-1" aria-labelledby="editCustomerLabel<%= customers[i].id %>" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <form action="/dashboard/customers/update" method="POST">
+                <div class="modal-header bg-success text-white">
+                  <h5 class="modal-title" id="editCustomerLabel<%= customers[i].id %>">Edit Customer: <%= customers[i].name %></h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <input type="hidden" name="id" value="<%= customers[i].id %>">
+                  <div class="mb-3">
+                    <label class="form-label">Name</label>
+                    <input type="text" name="name" class="form-control" value="<%= customers[i].name %>" required>
                   </div>
-                  <div class="modal-body">
-                    <p>Are you sure you want to delete <strong>
-                        <%= customers[i].name %>
-                      </strong>? <br>
-                      All related sales and prescriptions will be deleted too!</p>
+                  <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control" value="<%= customers[i].email %>" required>
                   </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger">Delete</button>
+                  <div class="mb-3">
+                    <label class="form-label">Phone</label>
+                    <input type="text" name="phone" class="form-control" value="<%= customers[i].phone %>" required>
                   </div>
-                </form>
-              </div>
+                  <div class="mb-3">
+                    <label class="form-label">Address</label>
+                    <input type="text" name="address" class="form-control" value="<%= customers[i].address %>" required>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  <button type="submit" class="btn btn-success">Save Changes</button>
+                </div>
+              </form>
             </div>
           </div>
+        </div>
 
-          <div class="modal fade" id="editCustomerModal<%= customers[i].id %>" tabindex="-1"
-            aria-labelledby="editCustomerLabel<%= customers[i].id %>" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <form action="/dashboard/customers/update" method="POST">
-                  <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="editCustomerLabel<%= customers[i].id %>">
-                      Edit Customer: <%= customers[i].name %>
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                      aria-label="Close"></button>
-                  </div>
-
-                  <div class="modal-body">
-                    <input type="hidden" name="id" value="<%= customers[i].id %>">
-
-                    <div class="mb-3">
-                      <label for="name<%= customers[i].id %>" class="form-label">Name</label>
-                      <input type="text" id="name<%= customers[i].id %>" name="name" class="form-control"
-                        value="<%= customers[i].name %>" required>
-                    </div>
-
-                    <div class="mb-3">
-                      <label for="email<%= customers[i].id %>" class="form-label">Email</label>
-                      <input type="email" id="email<%= customers[i].id %>" name="email" class="form-control"
-                        value="<%= customers[i].email %>" required>
-                    </div>
-
-                    <div class="mb-3">
-                      <label for="phone<%= customers[i].id %>" class="form-label">Phone</label>
-                      <input type="text" id="phone<%= customers[i].id %>" name="phone" class="form-control"
-                        value="<%= customers[i].phone %>" required>
-                    </div>
-
-                    <div class="mb-3">
-                      <label for="address<%= customers[i].id %>" class="form-label">Address</label>
-                      <input type="text" id="address<%= customers[i].id %>" name="address" class="form-control"
-                        value="<%= customers[i].address %>" required>
-                    </div>
-                  </div>
-
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                  </div>
-                </form>
-              </div>
+        <!-- Delete Modal -->
+        <div class="modal fade" id="deleteModal<%= customers[i].id %>" tabindex="-1" aria-labelledby="deleteLabel<%= customers[i].id %>" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <form action="/dashboard/customers/delete/<%= customers[i].id %>" method="POST">
+                <div class="modal-header bg-danger text-white">
+                  <h5 class="modal-title" id="deleteLabel<%= customers[i].id %>">Confirm Deletion</h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <p>Are you sure you want to delete <strong><%= customers[i].name %></strong>? <br>All related sales and prescriptions will be deleted too!</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+              </form>
             </div>
           </div>
-          <% } %>
+        </div>
+        <% } %>
       </tbody>
     </table>
   </div>
 
+  <!-- Add Customer Modal -->
   <div class="modal fade" id="addCustomerModal" tabindex="-1" aria-labelledby="addCustomerLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <form action="/dashboard/customers/add" method="POST">
-          <div class="modal-header">
+          <div class="modal-header bg-primary text-white">
             <h5 class="modal-title" id="addCustomerLabel">Add New Customer</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-
           <div class="modal-body">
             <div class="row g-3">
-
               <div class="col-md-6">
-                <label for="name" class="form-label">Name</label>
-                <input type="text" name="name" id="name" class="form-control" required>
+                <label class="form-label">Name</label>
+                <input type="text" name="name" class="form-control" required>
               </div>
-
               <div class="col-md-6">
-                <label for="phone" class="form-label">Phone</label>
-                <input type="text" name="phone" id="phone" class="form-control" required>
+                <label class="form-label">Phone</label>
+                <input type="text" name="phone" class="form-control" required>
               </div>
-
               <div class="col-md-6">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" name="email" id="email" class="form-control" required>
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" required>
               </div>
-
               <div class="col-md-6">
-                <label for="address" class="form-label">Address</label>
-                <input type="text" name="address" id="address" class="form-control" required>
+                <label class="form-label">Address</label>
+                <input type="text" name="address" class="form-control" required>
               </div>
-
             </div>
           </div>
-
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
             <button type="submit" class="btn btn-primary">Add Customer</button>
@@ -180,3 +144,45 @@
     </div>
   </div>
 </div>
+
+<style>
+  /* Table Container */
+  .table-responsive {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  }
+
+  .table-hover tbody tr:hover {
+    background-color: #e6f4ea;
+    transition: 0.2s;
+  }
+
+  .table-success {
+    background: linear-gradient(90deg, #d1fae5, #a7f3d0);
+  }
+
+  /* Buttons */
+  .btn-pharma {
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    transition: 0.3s;
+  }
+
+  .btn-pharma:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(34,197,94,0.4);
+  }
+
+  /* Modal Headers */
+  .modal-header.bg-success {
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+  }
+
+  .modal-header.bg-primary {
+    background: linear-gradient(135deg, #3b82f6, #06b6d4);
+  }
+</style>

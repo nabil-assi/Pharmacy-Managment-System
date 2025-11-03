@@ -1,47 +1,59 @@
 <div class="main-content">
+  <div class="section-card shadow-sm p-4 rounded bg-white mb-4">
+    <h2 class="fw-bold mb-2">
+      <i class="bi bi-person-circle me-2"></i> Customer: <%= customer.name %>
+    </h2>
+    <p class="mb-1"><strong>Email:</strong> <%= customer.email %></p>
+    <p class="mb-0"><strong>Phone:</strong> <%= customer.phone %></p>
+  </div>
 
-  <h2>Customer: <%= customer.name %>
-  </h2>
-  <p><strong>Email:</strong>
-    <%= customer.email %>
-  </p>
-  <p><strong>Phone:</strong>
-    <%= customer.phone %>
-  </p>
-
-  <h3>Purchase History</h3>
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Medicine</th>
-        <th>Quantity</th>
-        <th>Total Price</th>
-        <th>Date</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% for (let i=0; i < sales.length; i++) { %>
-        <tr>
-          <td>
-            <%= i + 1 %>
-          </td>
-          <td>
-            <%= sales[i].medicine_name %>
-          </td>
-          <td>
-            <%= sales[i].quantity %>
-          </td>
-          <td>
-            <%= sales[i].total_price %>
-          </td>
-          <td>
-            <%= sales[i].sale_date_formatted %>
-          </td>
-        </tr>
-        <% } %>
-    </tbody>
-  </table>
-
-
+  <div class="section-card shadow-sm p-4 rounded bg-white">
+    <h3 class="fw-bold mb-3"><i class="bi bi-receipt me-2"></i> Purchase History</h3>
+    <div class="table-responsive">
+      <table class="table table-striped table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>#</th>
+            <th>Medicine</th>
+            <th>Quantity</th>
+            <th>Total Price</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for (let i = 0; i < sales.length; i++) { %>
+            <tr>
+              <td><%= i + 1 %></td>
+              <td><%= sales[i].medicine_name %></td>
+              <td><%= sales[i].quantity %></td>
+              <td>$<%= parseFloat(sales[i].total_price).toFixed(2) %></td>
+              <td><%= sales[i].sale_date_formatted %></td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
+
+<style>
+  .section-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  h2, h3 {
+    color: #111827;
+  }
+
+  table th, table td {
+    vertical-align: middle;
+  }
+
+  .table-hover tbody tr:hover {
+    background-color: #f1f5f9;
+  }
+</style>

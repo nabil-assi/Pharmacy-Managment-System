@@ -69,6 +69,7 @@ router.get("/medicines", authMiddleware(), async (req, res) => {
       LEFT JOIN categories c ON m.category_id = c.id
     `);
 
+    console.log(medicines);
     const formattedMedicines = medicines.map((med) => ({
       ...med,
       expiry_date_formatted: formatDate(med.expiry_date),
@@ -308,10 +309,11 @@ router.get("/batches", authMiddleware(), async (req, res) => {
 router.get("/settings", authMiddleware(), async (req, res) => {
   try {
     const pharmacy = await db.query("SELECT * FROM pharmacy");
+    console.log(pharmacy[0]);
 
     const message = req.session.message;
     delete req.session.message;
-    // console.log(pharmacy[0]);
+    //
     res.render("pages/settings", {
       title: "Settings",
       pharmacy: pharmacy[0],
@@ -372,8 +374,12 @@ router.post("/profile", authMiddleware(), async (req, res) => {
 
     await db.query(query, params);
 
+    req.session.message = {
+      type: "success",
+      text: "Updated profile successfully!",
+    };
     // console.log(`User ${email} updated their profile`);
-    res.redirect("/profile");
+    res.redirect("/dashboard/profile");
   } catch (err) {
     console.error("Error updating profile:", err);
     res.status(500).send("Server error");
