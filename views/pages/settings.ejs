@@ -4,30 +4,30 @@
       <i class="bi bi-building me-2"></i> Pharmacy Information
     </div>
 
-    <form>
+    <form action="/dashboard/settings/update" method="POST">
       <div class="mb-3">
         <label class="form-label fw-semibold">Pharmacy Name</label>
-        <input type="text" class="form-control" value="<%= pharmacy.pharmacy_name %>" placeholder="Enter Pharmacy Name">
+        <input type="text" class="form-control" value="<%= pharmacy.pharmacy_name %>" name="pharmacy_name" placeholder="Enter Pharmacy Name">
       </div>
 
       <div class="mb-3">
         <label class="form-label fw-semibold">Address</label>
-        <input type="text" class="form-control" value="<%= pharmacy.address %>" placeholder="Enter Address">
+        <input type="text" class="form-control" value="<%= pharmacy.address %>" name="address" placeholder="Enter Address">
       </div>
 
       <div class="mb-3">
         <label class="form-label fw-semibold">Phone Number</label>
-        <input type="text" class="form-control" value="<%= pharmacy.phone_number %>" placeholder="+962...">
+        <input type="text" class="form-control" value="<%= pharmacy.phone_number %>" name="phone_number" placeholder="+962...">
       </div>
 
       <div class="mb-3">
         <label class="form-label fw-semibold">Email</label>
-        <input type="email" class="form-control" value="<%= pharmacy.email %>" placeholder="example@pharmacy.com">
+        <input type="email" class="form-control" value="<%= pharmacy.email %>" name="email" placeholder="example@pharmacy.com">
       </div>
 
       <div class="mb-3">
         <label class="form-label fw-semibold">Working Hours</label>
-        <input type="text" class="form-control" value="<%= pharmacy.working_hours %>" placeholder="e.g., 8:00 AM - 8:00 PM">
+        <input type="text" class="form-control" value="<%= pharmacy.working_hours %>" name="working_hours" placeholder="e.g., 8:00 AM - 8:00 PM">
       </div>
 
       <button type="submit" class="btn btn-pharma mt-2">
