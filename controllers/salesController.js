@@ -1,6 +1,8 @@
 const db = require("../config/db");
 
 const saleAdd= async (req, res) => {
+  const userId = req.session.user.id;
+  
   const { customer_id, medicine_id, quantity } = req.body;
   const quantitySold = parseInt(quantity);
 

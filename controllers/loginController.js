@@ -81,8 +81,7 @@ const forgotPassword = async (req, res) => {
 const forgotPasswordPost = async (req, res) => {
   try {
     const { email } = req.body;
-    // console.log("Forgot password request for email:", email);
-
+ 
     if (!email) {
       req.session.message = {
         type: "error",
@@ -119,7 +118,7 @@ const forgotPasswordPost = async (req, res) => {
       <p>This link will expire in 1 hour.</p>
     `;
 
-    const sent = await sendEmail(email, "Reset your password", html);
+    const sent = await sendEmail(email, "Reset your password", 'html');
 
     if (!sent) {
       console.error("Failed to send email to", email);

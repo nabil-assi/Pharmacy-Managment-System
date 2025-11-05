@@ -4,10 +4,9 @@ const dotenv = require("dotenv");
 const expressLayouts = require("express-ejs-layouts");
 const app = express();
 const session = require("express-session");
-// Load environment variables
+
 dotenv.config();
 
-// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -15,8 +14,6 @@ app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(expressLayouts);
-// app.set("layout", "templates/index");
-// app.set("layout", "templates/loginTemplate");
 
 // Static files
 app.use(express.static(path.join(__dirname, "public")));
@@ -26,35 +23,39 @@ app.use(
     secret: process.env.JWT_SECRET,
     resave: false,
     saveUninitialized: true,
-    // cookie: { maxAge: 1000 * 60 * 60 },  
+    // cookie: { maxAge: 1000 * 60 * 60 },
   })
 );
 
 // Routes
-const staffRoutes = require("./routes/staff");
-const prescriptionsRoutes = require("./routes/prescriptions");
-const categoriesRoutes = require("./routes/categories");
-const salesRoutes = require("./routes/sales");
-const medicinesRoutes = require("./routes/medicines");
-const customersRoutes = require("./routes/customers");
+// Controllers
 const dashboardRoutes = require("./routes/dashboard");
-const loginRoutes = require("./routes/login");
 app.use("/dashboard", dashboardRoutes);
+
+const medicinesRoutes = require("./routes/medicines");
 app.use("/dashboard/medicines", medicinesRoutes);
+
+const customersRoutes = require("./routes/customers");
 app.use("/dashboard/customers", customersRoutes);
+
+const salesRoutes = require("./routes/sales");
 app.use("/dashboard/sales", salesRoutes);
+
+const prescriptionsRoutes = require("./routes/prescriptions");
 app.use("/dashboard/prescriptions", prescriptionsRoutes);
+
+const categoriesRoutes = require("./routes/categories");
 app.use("/dashboard/categories", categoriesRoutes);
+
+const staffRoutes = require("./routes/staff");
 app.use("/dashboard/staff", staffRoutes);
+
+const loginRoutes = require("./routes/login");
 app.use("/login", loginRoutes);
 
-// Home route
-app.get("/", (req, res) => {
-  res.render("index", { title: "Pharmacy Dashboard" });
-});
 
 // Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}/dashboard`);
+  console.log(`🚀 Server running on http://localhost:${PORT}/login`);
 });
