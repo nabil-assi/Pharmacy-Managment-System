@@ -1,2 +1,19 @@
-[ ]- Customer print
-[ ]- Setting section
+Missing Points / Improvements:
+
+[ ] - Weak README documentation: Needs more detailed explanation of each feature, user interface, and     example data.
+
+[ ] - No tests: There are no unit tests or integration tests implemented.
+
+[ ] - Simple user interface: The UI needs improvement to provide a more interactive and user-friendly experience.
+
+[♥] - Missing advanced features: Features like drug expiry alerts, low stock notifications, and transaction history are not implemented.
+
+[ ] - Security: Ensure proper password protection and prevent SQL injection attacks.
+
+[ ] - Performance and scalability improvements: Support pagination for large datasets, optimize queries, and prepare the database for scalability.
+
+[ ] - Weak internal code documentation: Use comments to explain complex logic within the code.
+
+[ ] - No Docker setup or demo version: A demo or containerized version would make it easier for others to test the project.
+
+[ ] - Missing error logging: Logging is needed to track and debug issues effectively.

@@ -1,6 +1,7 @@
 const express = require("express");
 const db = require("../config/db");
 const { formatDate } = require("../utils/helper");
+const { checkExpiry, checkLowStock } = require("../utils/notification");
 
 const mainPage = async (req, res) => {
   try {
@@ -40,7 +41,8 @@ const mainPage = async (req, res) => {
     }));
     const message = req.session.message;
     delete req.session.message;
-
+    const expiryAlerts = await checkExpiry();
+    const lowStockAlerts = await checkLowStock();
     res.render("pages/main", {
       medicines,
       customers,
@@ -50,6 +52,8 @@ const mainPage = async (req, res) => {
       message,
       layout: "templates/index",
       req,
+      lowStockAlerts: expiryAlerts,
+      expiryAlerts: lowStockAlerts,
     });
   } catch (err) {
     console.error("Error fetching dashboard data:", err);
@@ -76,7 +80,8 @@ const medicinePage = async (req, res) => {
 
     const message = req.session.message;
     delete req.session.message;
-
+    const expiryAlerts = await checkExpiry();
+    const lowStockAlerts = await checkLowStock();
     res.render("pages/medicines", {
       medicines: formattedMedicines,
       categories: categories,
@@ -85,6 +90,8 @@ const medicinePage = async (req, res) => {
       message,
       layout: "templates/index",
       req,
+      lowStockAlerts: lowStockAlerts,
+      expiryAlerts: expiryAlerts,
     });
   } catch (err) {
     console.error("Error fetching medicines:", err);
@@ -127,7 +134,8 @@ const customerPage = async (req, res) => {
     }));
     const message = req.session.message;
     delete req.session.message;
-
+    const expiryAlerts = await checkExpiry();
+    const lowStockAlerts = await checkLowStock();
     res.render("pages/customer", {
       customer,
       sales: formattedSales,
@@ -136,6 +144,8 @@ const customerPage = async (req, res) => {
       message,
       layout: "templates/index",
       req,
+      lowStockAlerts: lowStockAlerts,
+      expiryAlerts: expiryAlerts,
     });
   } catch (err) {
     console.error("Error loading customer page:", err);
@@ -147,7 +157,8 @@ const customersPage = async (req, res) => {
     const [customers] = await db.query("SELECT * FROM customers");
     const message = req.session.message;
     delete req.session.message;
-
+    const expiryAlerts = await checkExpiry();
+    const lowStockAlerts = await checkLowStock();
     res.render("pages/customers", {
       title: "Customers",
       customers,
@@ -155,6 +166,8 @@ const customersPage = async (req, res) => {
       message,
       layout: "templates/index",
       req,
+      lowStockAlerts: lowStockAlerts,
+      expiryAlerts: expiryAlerts,
     });
   } catch (err) {
     console.error("Error fetching customers:", err);
@@ -192,7 +205,8 @@ const salesPage = async (req, res) => {
     }));
     const message = req.session.message;
     delete req.session.message;
-
+    const expiryAlerts = await checkExpiry();
+    const lowStockAlerts = await checkLowStock();
     res.render("pages/sales", {
       medicines,
       customers,
@@ -202,6 +216,8 @@ const salesPage = async (req, res) => {
       message,
       layout: "templates/index",
       req,
+      lowStockAlerts: lowStockAlerts,
+      expiryAlerts: expiryAlerts,
     });
   } catch (err) {
     console.error("Error fetching dashboard data:", err);
@@ -213,7 +229,8 @@ const categoriesPage = async (req, res) => {
     const [categories] = await db.query("SELECT * FROM categories");
     const message = req.session.message;
     delete req.session.message;
-
+    const expiryAlerts = await checkExpiry();
+    const lowStockAlerts = await checkLowStock();
     res.render("pages/categories", {
       title: "Categories",
       categories,
@@ -221,6 +238,8 @@ const categoriesPage = async (req, res) => {
       message,
       layout: "templates/index",
       req,
+      lowStockAlerts: lowStockAlerts,
+      expiryAlerts: expiryAlerts,
     });
   } catch (err) {
     console.error("Error fetching categories:", err);
@@ -232,7 +251,8 @@ const staffPage = async (req, res) => {
     const [stuff] = await db.query("SELECT * FROM staff");
     const message = req.session.message;
     delete req.session.message;
-
+    const expiryAlerts = await checkExpiry();
+    const lowStockAlerts = await checkLowStock();
     res.render("pages/staff", {
       title: "Pharmacists",
       stuff,
@@ -240,6 +260,8 @@ const staffPage = async (req, res) => {
       message,
       layout: "templates/index",
       req,
+      lowStockAlerts: lowStockAlerts,
+      expiryAlerts: expiryAlerts,
     });
   } catch (err) {
     console.error("Error fetching pharmacists:", err);
@@ -272,6 +294,8 @@ const prescriptionsPage = async (req, res) => {
       message,
       layout: "templates/index",
       req,
+      lowStockAlerts: checkLowStock,
+      expiryAlerts: checkExpiry,
     });
   } catch (err) {
     console.error("Error fetching prescriptions:", err);
@@ -296,6 +320,8 @@ const batchesPage = async (req, res) => {
       message,
       layout: "templates/index",
       req,
+      lowStockAlerts: checkLowStock,
+      expiryAlerts: checkExpiry,
     });
   } catch (err) {
     console.error("Error fetching batches:", err);
@@ -309,7 +335,8 @@ const settingsPage = async (req, res) => {
 
     const message = req.session.message;
     delete req.session.message;
-
+    const expiryAlerts = await checkExpiry();
+    const lowStockAlerts = await checkLowStock();
     res.render("pages/settings", {
       title: "Settings",
       pharmacy,
@@ -317,6 +344,8 @@ const settingsPage = async (req, res) => {
       message,
       layout: "templates/index",
       req,
+      lowStockAlerts: lowStockAlerts,
+      expiryAlerts: expiryAlerts,
     });
   } catch (err) {
     console.error("Error fetching pharmacy:", err);
@@ -356,7 +385,8 @@ const profilePage = async (req, res) => {
     if (rows.length === 0) {
       return res.status(404).send("User not found");
     }
-
+    const expiryAlerts = await checkExpiry();
+    const lowStockAlerts = await checkLowStock();
     const user = rows[0];
     res.render("pages/profile", {
       title: "Profile",
@@ -364,6 +394,8 @@ const profilePage = async (req, res) => {
       message,
       url: req.url,
       req,
+      lowStockAlerts: lowStockAlerts,
+      expiryAlerts: expiryAlerts,
       layout: "templates/index",
     });
   } catch (err) {

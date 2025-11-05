@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { authMiddleware } = require("../middleware/auth");
 const dashboardController  = require("../controllers/dashboardController");
+const {checkExpiry, checkLowStock} = require('../utils/notification');
 
 router.get("/", authMiddleware(), dashboardController.mainPage);
 router.get("/medicines", authMiddleware(),dashboardController.medicinePage);
