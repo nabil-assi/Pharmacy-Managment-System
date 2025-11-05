@@ -30,7 +30,11 @@ A simple and efficient Pharmacy Management System designed to help manage sales,
 
 
 
-npm install 
+npm install express
+npm install dotenv
+npm install express-ejs-layouts
+npm install express-session
+npm install bcrypt
 
 
  
