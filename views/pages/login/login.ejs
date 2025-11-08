@@ -1,0 +1,39 @@
+<div class="pharma-login-card text-center">
+  <h3 class="mb-4 fw-bold text-success">
+    <i class="bi bi-capsule me-2"></i> Pharmacy Login
+  </h3>
+
+  <form method="POST" action="/login/check-login" class="text-start">
+
+    <div class="mb-3">
+      <label for="email" class="form-label fw-semibold text-success">
+        <i class="bi bi-envelope-at me-1"></i>Email
+      </label>
+      <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="password" class="form-label fw-semibold text-success">
+        <i class="bi bi-lock me-1"></i>Password
+      </label>
+      <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" required>
+    </div>
+
+    <div class="mt-4 mb-3 d-flex justify-content-center gap-3 flex-wrap">
+      <button type="submit" name="role" value="Admin" class="btn btn-pharma px-4 d-flex align-items-center">
+        <i class="bi bi-person-gear me-2"></i> Admin
+      </button>
+      <button type="submit" name="role" value="Pharmacist" class="btn btn-outline-success px-4 d-flex align-items-center">
+        <i class="bi bi-prescription2 me-2"></i> Pharmacist
+      </button>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-2">
+      <a href="/login/forgot-password" class="small text-decoration-none text-success fw-medium">
+        <i class="bi bi-question-circle me-1"></i> Forgot password?
+      </a>
+    </div>
+
+    <p class="mt-4 text-muted small text-center">Select your role to sign in to the system</p>
+  </form>
+</div>

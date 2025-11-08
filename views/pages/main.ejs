@@ -1,0 +1,139 @@
+<!-- Main Content -->
+<div class="main-content">
+    <h4 class="mb-4 fw-bold text-dark">Overview</h4>
+
+    <div class="row g-4">
+        <!-- Medicines Card -->
+        <div class="col-md-4">
+            <div class="card hover-card border-0">
+                <div class="card-body">
+                    <a href="/dashboard/medicines" class="text-decoration-none">
+                        <h6 class="card-title text-success fw-semibold">
+                            <i class="bi bi-capsule me-2"></i> Medicines
+                        </h6>
+                    </a>
+                    <p class="card-text text-muted mt-2">
+                        Total Medicines: <strong class="text-dark"><%= medicines.length %></strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customers Card -->
+        <div class="col-md-4">
+            <div class="card hover-card border-0">
+                <div class="card-body">
+                    <a href="/dashboard/customers" class="text-decoration-none">
+                        <h6 class="card-title text-success fw-semibold">
+                            <i class="bi bi-people me-2"></i> Customers
+                        </h6>
+                    </a>
+                    <p class="card-text text-muted mt-2">
+                        Registered: <strong class="text-dark"><%= customers.length %></strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sales Card -->
+        <div class="col-md-4">
+            <div class="card hover-card border-0">
+                <div class="card-body">
+                    <a href="/dashboard/sales" class="text-decoration-none">
+                        <h6 class="card-title text-success fw-semibold">
+                            <i class="bi bi-receipt me-2"></i> Sales
+                        </h6>
+                    </a>
+                    <% let totalSales = 0; for(let i=0;i<sales.length;i++){ totalSales += parseFloat(sales[i].total_price); } %>
+                    <p class="card-text text-muted mt-2">
+                        This Month: <strong class="text-dark"><%= totalSales.toFixed(2) %> $</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Sales Table -->
+    <div class="mt-5">
+        <h5 class="fw-semibold text-dark">Recent Sales</h5>
+        <div class="table-responsive shadow-sm rounded mt-3">
+            <table class="table table-striped table-hover align-middle mb-0">
+                <thead class="table-success text-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Customer</th>
+                        <th>Medicine</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th>Sale Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for(let i=0; i<sales.length; i++) { %>
+                        <tr>
+                            <td><%= i+1 %></td>
+                            <td>
+                                <a href="/dashboard/customers/<%= sales[i].customer_id %>" class="text-decoration-none text-success">
+                                    <%= sales[i].customer_name %>
+                                </a>
+                            </td>
+                            <td><%= sales[i].medicine_name %></td>
+                            <td><%= sales[i].quantity %></td>
+                            <td><strong class="text-dark"><%= sales[i].total_price %> $</strong></td>
+                            <td><%= sales[i].sale_date_formatted %></td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Hover effect for cards */
+    .hover-card {
+        border-radius: 15px;
+        background: #fff;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    }
+
+    .hover-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+    }
+
+    /* Table enhancements */
+    .table-hover tbody tr:hover {
+        background-color: #e6f4ea;
+        transition: 0.2s;
+    }
+
+    .table-success {
+        background: linear-gradient(90deg, #d1fae5, #a7f3d0);
+    }
+
+    .table-responsive {
+        background: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    /* Card titles */
+    .card-title {
+        font-size: 1.05rem;
+    }
+
+    /* Text improvements */
+    .text-success {
+        color: #16a34a !important;
+    }
+
+    .text-dark {
+        color: #1f2937 !important;
+    }
+
+    .text-muted {
+        color: #6b7280 !important;
+    }
+</style>

@@ -1,0 +1,84 @@
+<!-- Main Content -->
+<div class="main-content">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4>Prescription Records</h4>
+    <button class="btn btn-primary"><i class="bi bi-plus-circle me-1"></i> Add Prescription</button>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead class="table-light">
+        <tr>
+          <th>#</th>
+          <th>Customer</th>
+          <th>Doctor</th>
+          <th>Notes</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for( let i=0; i < prescriptions.length; i++ ) { %>
+
+          <tr>
+
+            <td>
+              <%= i + 1 %>
+            </td>
+            <td> <a href="/dashboard/customers/<%= prescriptions[i].customer_id %>">
+                <%= prescriptions[i].customer_name %>
+              </a> </td>
+            <td>
+              <%= prescriptions[i].pharmacist_name %>
+            </td>
+            <td>
+              <%= prescriptions[i].notes %>
+            </td>
+            <td>
+              <%= prescriptions[i].created_at_formatted %>
+            </td>
+
+
+            <td>
+              <button class="btn btn-sm btn-outline-primary me-1" onclick="editPrescription(1)">
+                <i class="bi bi-pencil-square"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+                data-bs-target="#deleteModal<%= prescriptions[i].id %>">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+
+
+
+            <div class="modal fade" id="deleteModal<%= prescriptions[i].id %>" tabindex="-1"
+              aria-labelledby="deleteLabel<%= prescriptions[i].id %>" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <form action="/dashboard/prescriptions/delete/<%= prescriptions[i].id%>" method="POST">
+                    <div class="modal-header bg-danger text-white">
+                      <h5 class="modal-title" id="deleteLabel<%= prescriptions[i].id %>">Confirm deleting</h5>
+                      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <p>Are you sure for deleting this prescriptions! <strong>
+                          <%= prescriptions[i].customer_name %>
+                        </strong>؟</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                      <button type="submit" class="btn btn-danger">Delete</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+          </tr>
+          <% } %>
+
+      </tbody>
+    </table>
+  </div>
+</div>

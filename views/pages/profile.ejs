@@ -1,0 +1,67 @@
+<div class="main-content">
+  <div class="section-card shadow-sm p-4 rounded bg-white mx-auto" style="max-width: 600px;">
+    <div class="section-title mb-4 fs-5 fw-bold">
+      <i class="bi bi-person-circle me-2"></i> Profile Information
+    </div>
+
+    <form method="POST" action="/dashboard/profile">
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Name</label>
+        <input type="text" name="name" class="form-control" value="<%= user.name %>" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Email</label>
+        <input type="email" name="email" class="form-control" value="<%= user.email %>" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Gender</label>
+        <select name="gender" class="form-select">
+          <option value="male" <%= user.gender==='male' ? 'selected' : '' %>>Male</option>
+          <option value="female" <%= user.gender==='female' ? 'selected' : '' %>>Female</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Phone</label>
+        <input type="text" name="phone" class="form-control" value="<%= user.phone %>" required>
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label fw-semibold">New Password <span class="text-muted">(leave blank to keep current)</span></label>
+        <input type="password" name="password" class="form-control" placeholder="••••••••">
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100 py-2 fw-bold mb-3">
+        <i class="bi bi-save me-2"></i> Update Profile
+      </button>
+    </form>
+
+    <div class="text-center">
+      <a href="/logout" class="text-danger fw-semibold"><i class="bi bi-box-arrow-right me-1"></i> Logout</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .section-card {
+    border-radius: 12px;
+    padding: 25px;
+    background-color: #ffffff;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  }
+
+  .section-title {
+    font-size: 1.25rem;
+    color: #111827;
+  }
+
+  .form-label {
+    font-weight: 500;
+  }
+
+  button:focus, select:focus, input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(13,110,253,.25);
+  }
+</style>

@@ -1,0 +1,61 @@
+<div class="main-content">
+  <div class="section-card shadow-sm p-4 rounded bg-white">
+    <div class="section-title mb-4 fs-5 fw-bold text-dark">
+      <i class="bi bi-building me-2"></i> Pharmacy Information
+    </div>
+
+    <form action="/dashboard/settings/update" method="POST">
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Pharmacy Name</label>
+        <input type="text" class="form-control" value="<%= pharmacy.pharmacy_name %>" name="pharmacy_name" placeholder="Enter Pharmacy Name">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Address</label>
+        <input type="text" class="form-control" value="<%= pharmacy.address %>" name="address" placeholder="Enter Address">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Phone Number</label>
+        <input type="text" class="form-control" value="<%= pharmacy.phone_number %>" name="phone_number" placeholder="+962...">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Email</label>
+        <input type="email" class="form-control" value="<%= pharmacy.email %>" name="email" placeholder="example@pharmacy.com">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Working Hours</label>
+        <input type="text" class="form-control" value="<%= pharmacy.working_hours %>" name="working_hours" placeholder="e.g., 8:00 AM - 8:00 PM">
+      </div>
+
+      <button type="submit" class="btn btn-pharma mt-2">
+        <i class="bi bi-save me-1"></i> Save Changes
+      </button>
+    </form>
+  </div>
+</div>
+
+<style>
+  .section-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  }
+  .section-title {
+    color: #111827;
+  }
+  .btn-pharma {
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    transition: 0.3s;
+  }
+  .btn-pharma:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(34,197,94,0.4);
+  }
+</style>

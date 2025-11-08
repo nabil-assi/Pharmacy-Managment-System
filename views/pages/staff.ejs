@@ -1,0 +1,226 @@
+<div class="main-content">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold text-dark">Staff List</h4>
+    <button class="btn btn-pharma d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#addStaffModal">
+      <i class="bi bi-plus-circle me-1"></i> Add Staff Member
+    </button>
+  </div>
+
+  <div class="table-responsive shadow-sm rounded bg-white p-3">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-info text-dark">
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (let i = 0; i < stuff.length; i++) { %>
+        <tr>
+          <td><%= i + 1 %></td>
+          <td><%= stuff[i].name %></td>
+          <td><%= stuff[i].email %></td>
+          <td><%= stuff[i].role %></td>
+          <td class="text-center">
+            <span class="badge <%= stuff[i].is_active == 1 ? 'bg-success' : 'bg-danger' %> text-white">
+              <%= stuff[i].is_active == 1 ? 'Active' : 'Inactive' %>
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal"
+              data-bs-target="#editStaffModal<%= stuff[i].id %>">
+              <i class="bi bi-pencil-square"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+              data-bs-target="#deleteStaffModal<%= stuff[i].id %>">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        </tr>
+
+        <!-- Edit Staff Modal -->
+        <div class="modal fade" id="editStaffModal<%= stuff[i].id %>" tabindex="-1"
+          aria-labelledby="editStaffLabel<%= stuff[i].id %>" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <form action="/dashboard/staff/update" method="POST">
+                <input type="hidden" name="id" value="<%= stuff[i].id %>">
+                <div class="modal-header bg-primary text-white">
+                  <h5 class="modal-title" id="editStaffLabel<%= stuff[i].id %>">Update Staff: <%= stuff[i].name %></h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label class="form-label">Full Name</label>
+                      <input type="text" name="name" class="form-control" value="<%= stuff[i].name %>" required>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Email</label>
+                      <input type="email" name="email" class="form-control" value="<%= stuff[i].email %>" required>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Gender</label>
+                      <select name="gender" class="form-select" required>
+                        <option value="male" <%= stuff[i].gender==="male" ? "selected" : "" %>>Male</option>
+                        <option value="female" <%= stuff[i].gender==="female" ? "selected" : "" %>>Female</option>
+                      </select>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Phone</label>
+                      <input type="text" name="phone" class="form-control" value="<%= stuff[i].phone %>" placeholder="+962..." required>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Password</label>
+                      <input type="password" name="password" class="form-control" placeholder="Leave blank to keep current">
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Role</label>
+                      <select name="role" class="form-select" required>
+                        <option value="pharmacist" <%= stuff[i].role==="pharmacist" ? "selected" : "" %>>Pharmacist</option>
+                        <option value="cashier" <%= stuff[i].role==="cashier" ? "selected" : "" %>>Cashier</option>
+                        <option value="admin" <%= stuff[i].role==="admin" ? "selected" : "" %>>Admin</option>
+                      </select>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Active Status</label>
+                      <select name="is_active" class="form-select" required>
+                        <option value="1" <%= stuff[i].is_active==1 ? "selected" : "" %>>Active</option>
+                        <option value="0" <%= stuff[i].is_active==0 ? "selected" : "" %>>Inactive</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  <button type="submit" class="btn btn-pharma">Save Changes</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Delete Staff Modal -->
+        <div class="modal fade" id="deleteStaffModal<%= stuff[i].id %>" tabindex="-1"
+          aria-labelledby="deleteStaffLabel<%= stuff[i].id %>" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <form action="/dashboard/staff/delete/<%= stuff[i].id %>" method="POST">
+                <div class="modal-header bg-danger text-white">
+                  <h5 class="modal-title" id="deleteStaffLabel<%= stuff[i].id %>">Confirm Deletion</h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <p>Are you sure you want to delete <strong><%= stuff[i].name %></strong>?</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Add Staff Modal -->
+<div class="modal fade" id="addStaffModal" tabindex="-1" aria-labelledby="addStaffLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form action="/dashboard/staff/add" method="POST">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="addStaffLabel">Add New Staff Member</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Full Name</label>
+              <input type="text" name="name" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Email</label>
+              <input type="email" name="email" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Gender</label>
+              <select name="gender" class="form-select" required>
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Phone</label>
+              <input type="text" name="phone" class="form-control" placeholder="+962..." required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Password</label>
+              <input type="password" name="password" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Role</label>
+              <select name="role" class="form-select" required>
+                <option value="pharmacist">Pharmacist</option>
+                <option value="cashier">Cashier</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Active Status</label>
+              <select name="is_active" class="form-select" required>
+                <option value="1">Active</option>
+                <option value="0">Inactive</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-pharma">Add Staff</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<style>
+  .table-responsive {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  }
+  .table-hover tbody tr:hover {
+    background-color: #f1fdf4;
+    transition: 0.2s;
+  }
+  .table-info {
+    background: linear-gradient(90deg, #dbeafe, #bfdbfe);
+  }
+  .btn-pharma {
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    transition: 0.3s;
+  }
+  .btn-pharma:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(34,197,94,0.4);
+  }
+  .modal-header.bg-primary {
+    background: linear-gradient(135deg, #3b82f6, #06b6d4);
+  }
+  .modal-header.bg-danger {
+    background: linear-gradient(135deg, #dc2626, #f87171);
+  }
+</style>
