@@ -1,8 +1,6 @@
 const db = require("../config/db");
-
-const saleAdd= async (req, res) => {
-  const userId = req.session.user.id;
-  
+const saleAdd = async (req, res) => {
+  const userId = req.session.user.id; // هذا هو handled_by
   const { customer_id, medicine_id, quantity } = req.body;
   const quantitySold = parseInt(quantity);
 
@@ -32,9 +30,12 @@ const saleAdd= async (req, res) => {
 
     const total_price = medicine.price * quantitySold;
 
+    // تحديث استعلام الإدخال ليشمل handled_by
     await db.query(
-      "INSERT INTO sales (customer_id, medicine_id, quantity, total_price, sale_date) VALUES (?, ?, ?, ?, NOW())",
-      [customer_id, medicine_id, quantitySold, total_price]
+      `INSERT INTO sales 
+        (customer_id, medicine_id, quantity, total_price, sale_date, handled_by) 
+       VALUES (?, ?, ?, ?, NOW(), ?)`,
+      [customer_id, medicine_id, quantitySold, total_price, userId]
     );
 
     await db.query(
@@ -55,7 +56,8 @@ const saleAdd= async (req, res) => {
     };
     res.redirect("/dashboard/sales");
   }
-}
+};
+
 const saleDelete= async (req, res) => {
   const salesId = req.params.id;
   try {

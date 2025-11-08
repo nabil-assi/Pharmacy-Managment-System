@@ -2,6 +2,10 @@ const express = require("express");
 const router = express.Router();
 const staffController = require("../controllers/staffController");
 const { authMiddleware } = require("../middleware/auth"); 
+
+router.get("/", (req, res) => {
+  res.send("Staff");  
+});
 router.post(
   "/delete/:id",
   authMiddleware("admin"),

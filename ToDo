@@ -8,7 +8,7 @@ Missing Points / Improvements:
 
 [♥] - Missing advanced features: Features like drug expiry alerts, low stock notifications, and transaction history are not implemented.
 
-[ ] - Security: Ensure proper password protection and prevent SQL injection attacks.
+[♥] - Security: Ensure proper password protection and prevent SQL injection attacks.
 
 [ ] - Performance and scalability improvements: Support pagination for large datasets, optimize queries, and prepare the database for scalability.
 

@@ -4,9 +4,10 @@ const dotenv = require("dotenv");
 const expressLayouts = require("express-ejs-layouts");
 const app = express();
 const session = require("express-session");
-const helmet = require('helmet');
-
+const helmet = require("helmet");
+const errorHandler = require("./middleware/errorHandler");
 app.use(helmet());
+app.use(errorHandler);
 dotenv.config();
 
 app.use(express.json());
@@ -54,7 +55,6 @@ app.use("/dashboard/staff", staffRoutes);
 
 const loginRoutes = require("./routes/login");
 app.use("/login", loginRoutes);
-
 
 // Start server
 const PORT = process.env.PORT || 3000;

@@ -2,6 +2,7 @@ const express = require("express");
 const db = require("../config/db");
 const { formatDate } = require("../utils/helper");
 const { checkExpiry, checkLowStock } = require("../utils/notification");
+const logger = require("../utils/logger");
 
 const mainPage = async (req, res) => {
   try {
@@ -56,6 +57,7 @@ const mainPage = async (req, res) => {
       expiryAlerts: lowStockAlerts,
     });
   } catch (err) {
+      logger.error('Error in mainPage controller: %o', err);
     console.error("Error fetching dashboard data:", err);
     res.status(500).json({ error: "Database error" });
   }

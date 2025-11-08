@@ -3,10 +3,12 @@ const db = require("../config/db");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
  const { sendEmail } = require("../helper/emailHelper");
+const logger = require("../utils/logger");
+
 
 const login = async (req, res) => {
   try {
-    const message = req.session.message;
+    const message = req.session?.message || null; 
     delete req.session.message;
 
     res.render("pages/login/login", {
@@ -15,7 +17,8 @@ const login = async (req, res) => {
       layout: "templates/loginTemplate",
     });
   } catch (err) {
-    console.error("Error loading customer page:", err);
+ 
+    // console.error("Error loading customer page:", err);
     res.status(500).send("Server error");
   }
 };

@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const medicineController = require('../controllers/medicinesController');
-// Add a new medicine
+router.get("/", (req, res) => {
+  res.send("Medicines");  
+});
+
 router.post("/add",medicineController.medicineAdd  );
 
 router.post("/delete/:id",medicineController.medicineDelete );
