@@ -26,7 +26,7 @@ app.use(
     secret: process.env.JWT_SECRET,
     resave: false,
     saveUninitialized: true,
-    // cookie: { maxAge: 1000 * 60 * 60 },
+    cookie: { maxAge: 1000 * 60 * 60 },
   })
 );
 
@@ -52,6 +52,9 @@ app.use("/dashboard/categories", categoriesRoutes);
 
 const staffRoutes = require("./routes/staff");
 app.use("/dashboard/staff", staffRoutes);
+
+const activityRoutes = require("./routes/activity");
+app.use("/dashboard/activity", activityRoutes);
 
 const loginRoutes = require("./routes/login");
 app.use("/login", loginRoutes);

@@ -7,8 +7,8 @@ function authMiddleware(role) {
       };
       return res.redirect("/login");
     }
-    if(req.session.user.is_active == 0){
-         req.session.message = {
+    if (req.session.user.is_active == 0) {
+      req.session.message = {
         type: "error",
         text: "This user Inactive!",
       };

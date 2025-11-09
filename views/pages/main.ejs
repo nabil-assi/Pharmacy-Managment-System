@@ -13,7 +13,9 @@
                         </h6>
                     </a>
                     <p class="card-text text-muted mt-2">
-                        Total Medicines: <strong class="text-dark"><%= medicines.length %></strong>
+                        Total Medicines: <strong class="text-dark">
+                            <%= medicines.length %>
+                        </strong>
                     </p>
                 </div>
             </div>
@@ -29,7 +31,9 @@
                         </h6>
                     </a>
                     <p class="card-text text-muted mt-2">
-                        Registered: <strong class="text-dark"><%= customers.length %></strong>
+                        Registered: <strong class="text-dark">
+                            <%= customers.length %>
+                        </strong>
                     </p>
                 </div>
             </div>
@@ -44,10 +48,13 @@
                             <i class="bi bi-receipt me-2"></i> Sales
                         </h6>
                     </a>
-                    <% let totalSales = 0; for(let i=0;i<sales.length;i++){ totalSales += parseFloat(sales[i].total_price); } %>
-                    <p class="card-text text-muted mt-2">
-                        This Month: <strong class="text-dark"><%= totalSales.toFixed(2) %> $</strong>
-                    </p>
+                    <% let totalSales=0; for(let i=0;i<sales.length;i++){ totalSales +=parseFloat(sales[i].total_price);
+                        } %>
+                        <p class="card-text text-muted mt-2">
+                            This Month: <strong class="text-dark">
+                                <%= totalSales.toFixed(2) %> $
+                            </strong>
+                        </p>
                 </div>
             </div>
         </div>
@@ -71,22 +78,38 @@
                 <tbody>
                     <% for(let i=0; i<sales.length; i++) { %>
                         <tr>
-                            <td><%= i+1 %></td>
                             <td>
-                                <a href="/dashboard/customers/<%= sales[i].customer_id %>" class="text-decoration-none text-success">
+                                <%= i+1 %>
+                            </td>
+                            <td>
+                                <a href="/dashboard/customers/<%= sales[i].customer_id %>"
+                                    class="text-decoration-none text-success">
                                     <%= sales[i].customer_name %>
                                 </a>
                             </td>
-                            <td><%= sales[i].medicine_name %></td>
-                            <td><%= sales[i].quantity %></td>
-                            <td><strong class="text-dark"><%= sales[i].total_price %> $</strong></td>
-                            <td><%= sales[i].sale_date_formatted %></td>
+                            <td>
+                                <%= sales[i].medicine_name %>
+                            </td>
+                            <td>
+                                <%= sales[i].quantity %>
+                            </td>
+                            <td><strong class="text-dark">
+                                    <%= sales[i].total_price %> $
+                                </strong></td>
+                            <td>
+                                <%= sales[i].sale_date_formatted %>
+                            </td>
                         </tr>
-                    <% } %>
+                        <% } %>
                 </tbody>
             </table>
         </div>
     </div>
+    <div class="pagination">
+  <% for(let i = 1; i <= totalPages; i++) { %>
+    <a href="?page=<%= i %>" class="<%= i === currentPage ? 'active' : '' %>"><%= i %></a>
+  <% } %>
+</div>
 </div>
 
 <style>
@@ -95,12 +118,12 @@
         border-radius: 15px;
         background: #fff;
         transition: all 0.3s ease;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
     }
 
     .hover-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
     }
 
     /* Table enhancements */

@@ -1,19 +1,35 @@
-Missing Points / Improvements:
+ 🔐 تحسينات الأمان
+- [ ] إضافة حماية من CSRF باستخدام مكتبة csurf.
+- [ ] استخدام express-validator للتحقق من مدخلات المستخدم.
+- [ ] تفعيل helmet لتأمين الهيدرز ضد الهجمات الشائعة.
 
-[ ] - Weak README documentation: Needs more detailed explanation of each feature, user interface, and     example data.
+📱 تحسين تجربة الموبايل
+- [ ] تحسين تصميم الصفحات لتكون متجاوبة بالكامل باستخدام Bootstrap grid أو Flexbox.
+- [ ] اختبار كل صفحة على شاشات صغيرة (موبايل، تابلت).
 
-[ ] - No tests: There are no unit tests or integration tests implemented.
+📦 ميزات جديدة للنظام
+- [ ] دعم الباركود لمسح الأدوية باستخدام quaggaJS أو jsbarcode.
+- [ ] إضافة زر "تصدير PDF" للفواتير باستخدام pdfkit أو html-pdf.
+- [ ] إضافة زر "تصدير Excel" للتقارير باستخدام exceljs.
+- [ ] صفحة إدارة المستخدمين: تعديل الصلاحيات، تعطيل الحسابات، عرض النشاطات.
+- [ ] سجل دخول/خروج لكل مستخدم.
 
-[ ] - Simple user interface: The UI needs improvement to provide a more interactive and user-friendly experience.
+🎨 تحسينات واجهة المستخدم
+- [ ] تصميم الهيدر بشكل ثابت ونظيف بدون خلفيات أو بطاقات.
+- [ ] استخدام أيقونات واضحة مثل FontAwesome بدل النصوص الطويلة.
+- [ ] تنبيهات مرئية عند انخفاض كمية دواء (لون أحمر/أصفر).
+- [ ] خيار إرسال تنبيه بالبريد أو SMS (مستقبليًا).
 
-[♥] - Missing advanced features: Features like drug expiry alerts, low stock notifications, and transaction history are not implemented.
+📄 تحسين README والتوثيق
+- [ ] إضافة صور من الواجهة (screenshot لكل صفحة رئيسية).
+- [ ] إضافة جدول يوضح صلاحيات كل نوع مستخدم.
+- [ ] إضافة قسم "أفكار مستقبلية" لتشجيع المساهمة.
 
-[♥] - Security: Ensure proper password protection and prevent SQL injection attacks.
+🧪 تحسينات الاختبارات
+- [ ] إضافة اختبارات Unit لـ controllers, utils, middleware.
+- [ ] استخدام Jest أو Mocha مع supertest.
 
-[ ] - Performance and scalability improvements: Support pagination for large datasets, optimize queries, and prepare the database for scalability.
-
-[ ] - Weak internal code documentation: Use comments to explain complex logic within the code.
-
-[ ] - No Docker setup or demo version: A demo or containerized version would make it easier for others to test the project.
-
-[ ] - Missing error logging: Logging is needed to track and debug issues effectively.
+💡 اقتراحات ذكية مستقبلية
+- [ ] نظام تنبيهات ذكي يقترح إعادة طلب دواء بناءً على معدل البيع.
+- [ ] مساعد AI يرد على استفسارات الموظفين (مثلاً: "كم دواء باراسيتامول متبقي؟").
+- [ ] مزامنة مع Google Sheets أو Drive لحفظ نسخة احتياطية تلقائية.

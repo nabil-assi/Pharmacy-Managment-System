@@ -2,13 +2,12 @@ const express = require("express");
 const db = require("../config/db");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
- const { sendEmail } = require("../helper/emailHelper");
+const { sendEmail } = require("../helper/emailHelper");
 const logger = require("../utils/logger");
-
 
 const login = async (req, res) => {
   try {
-    const message = req.session?.message || null; 
+    const message = req.session?.message || null;
     delete req.session.message;
 
     res.render("pages/login/login", {
@@ -17,7 +16,6 @@ const login = async (req, res) => {
       layout: "templates/loginTemplate",
     });
   } catch (err) {
- 
     // console.error("Error loading customer page:", err);
     res.status(500).send("Server error");
   }
@@ -84,7 +82,7 @@ const forgotPassword = async (req, res) => {
 const forgotPasswordPost = async (req, res) => {
   try {
     const { email } = req.body;
- 
+
     if (!email) {
       req.session.message = {
         type: "error",
@@ -121,7 +119,7 @@ const forgotPasswordPost = async (req, res) => {
       <p>This link will expire in 1 hour.</p>
     `;
 
-    const sent = await sendEmail(email, "Reset your password", 'html');
+    const sent = await sendEmail(email, "Reset your password", html);
 
     if (!sent) {
       console.error("Failed to send email to", email);

@@ -4,50 +4,56 @@ const { formatDate } = require("../utils/helper");
 const { checkExpiry, checkLowStock } = require("../utils/notification");
 const logger = require("../utils/logger");
 
+const { getPagination } = require("../helper/pagination");
+
 const mainPage = async (req, res) => {
   try {
+    const page = parseInt(req.query.page) || 1;
+
     const [medicines] = await db.query("SELECT * FROM medicines");
     const [customers] = await db.query("SELECT * FROM customers");
-    const [sales] = await db.query(`
-    SELECT
-        *
-    FROM
-        sales
-    ORDER BY
-        sale_date DESC, id DESC
-    LIMIT 5;
-`);
-    for (let i = 0; i < sales.length; i++) {
-      const customerId = sales[i].customer_id;
-      const medicineId = sales[i].medicine_id;
 
-      const [customerRows] = await db.query(
-        "SELECT name FROM customers WHERE id = ?",
-        [customerId]
-      );
-      sales[i].customer_name = customerRows[0]?.name || "Unknown";
+    const [countResult] = await db.query("SELECT COUNT(*) AS count FROM sales");
+    const totalRows = countResult[0].count;
 
-      const [medicineRows] = await db.query(
-        "SELECT name FROM medicines WHERE id = ?",
-        [medicineId]
-      );
-      sales[i].medicine_name = medicineRows[0]?.name || "Unknown";
-    }
+    const { offset, rowsPerPage, totalPages } = getPagination(
+      page,
+      totalRows,
+      5
+    );
+
+    const [sales] = await db.query(
+      `
+      SELECT
+        sales.*,
+        customers.name AS customer_name,
+        medicines.name AS medicine_name
+      FROM sales
+      LEFT JOIN customers ON sales.customer_id = customers.id
+      LEFT JOIN medicines ON sales.medicine_id = medicines.id
+      ORDER BY sale_date DESC, sales.id DESC
+      LIMIT ? OFFSET ?
+    `,
+      [rowsPerPage, offset]
+    );
 
     const formattedSales = sales.map((sale) => ({
       ...sale,
       sale_date_formatted: formatDate(sale.sale_date),
-      customer_name: sale.customer_name,
-      medicine_name: sale.medicine_name,
     }));
+
     const message = req.session.message;
     delete req.session.message;
+
     const expiryAlerts = await checkExpiry();
     const lowStockAlerts = await checkLowStock();
+
     res.render("pages/main", {
       medicines,
       customers,
       sales: formattedSales,
+      currentPage: page,
+      totalPages,
       title: "Dashboard",
       url: req.url,
       message,
@@ -57,11 +63,12 @@ const mainPage = async (req, res) => {
       expiryAlerts: lowStockAlerts,
     });
   } catch (err) {
-      logger.error('Error in mainPage controller: %o', err);
+    logger.error("Error in mainPage controller: %o", err);
     console.error("Error fetching dashboard data:", err);
     res.status(500).json({ error: "Database error" });
   }
 };
+
 const medicinePage = async (req, res) => {
   try {
     const [categories] = await db.query("SELECT * FROM categories");
@@ -84,6 +91,7 @@ const medicinePage = async (req, res) => {
     delete req.session.message;
     const expiryAlerts = await checkExpiry();
     const lowStockAlerts = await checkLowStock();
+    
     res.render("pages/medicines", {
       medicines: formattedMedicines,
       categories: categories,

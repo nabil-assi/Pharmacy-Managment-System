@@ -1,5 +1,5 @@
 const db = require("../config/db");
-
+const logActivity = require("../helper/activityLogger");
 
 const customerAdd = async (req, res) => {
   const { name, phone, email, address } = req.body;
@@ -12,6 +12,15 @@ const customerAdd = async (req, res) => {
       type: "success",
       text: "Customer added successfully!",
     };
+    await logActivity({
+      user_id: req.session.user.id,
+      action_type: "add",
+      entity_type: "customer",
+      entity_id: result.insertId,
+      description: `New customer added: ${name} (Phone: ${phone}) with email ${email} and address ${address}`,
+      ip_address: req.ip,
+      user_agent: req.headers["user-agent"],
+    });
     res.redirect("/dashboard/customers");
   } catch (err) {
     console.error("Error adding customers:", err);
@@ -23,6 +32,9 @@ const customerDelete = async (req, res) => {
   try {
     // await db.query("DELETE FROM prescriptions WHERE customer_id = ?", [customerId]);
     // await db.query("DELETE FROM customers WHERE id = ?", [customerId]);
+    const [result] = await db.query("SELECT * FROM customers WHERE id = ?", [
+      customerId,
+    ]);
     await db.query("DELETE FROM customers WHERE id = ?", [customerId]);
 
     //delete o,z from orders
@@ -31,6 +43,16 @@ const customerDelete = async (req, res) => {
       type: "danger",
       text: "Customer deleted successfully!",
     };
+
+    await logActivity({
+      user_id: req.session.user.id,
+      action_type: "delete",
+      entity_type: "customer",
+      entity_id: result.insertId,
+      description: `Customer delete: ${result[0].name} (Phone: ${result[0].phone}) with email ${result[0].email} and address ${result[0].address}`,
+      ip_address: req.ip,
+      user_agent: req.headers["user-agent"],
+    });
     res.redirect("/dashboard/customers");
   } catch (err) {
     console.error("Error deleting customer:", err);
@@ -50,6 +72,15 @@ const customerUpdate = async (req, res) => {
       type: "success",
       text: `Customer '${name}' updated successfully!`,
     };
+    await logActivity({
+      user_id: req.session.user.id,
+      action_type: "update",
+      entity_type: "customer",
+      entity_id: id,
+      description: `Customer updated: ${name} (Phone: ${phone}) with email ${email} and address ${address}`,
+      ip_address: req.ip,
+      user_agent: req.headers["user-agent"],
+    });
     res.redirect("/dashboard/customers");
   } catch (err) {
     console.error("Error updating customer:", err);
@@ -78,7 +109,15 @@ const customerPrint = async (req, res) => {
     if (!sale) {
       return res.status(404).send("Sale not found");
     }
-
+    await logActivity({
+      user_id: req.session.user.id,
+      action_type: "print",
+      entity_type: "customer",
+      entity_id: id,
+      description: `Print customer sales report: ${customer[0].name} (Phone: ${customer[0].phone}) with email ${customer[0].email} and address ${customer[0].address}`,
+      ip_address: req.ip,
+      user_agent: req.headers["user-agent"],
+    });
     // Render without layout
     res.render("pages/printCustomerSales", {
       pharmacy: pharmacy[0],
@@ -94,9 +133,9 @@ const customerPrint = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
-module.exports = {  
-customerAdd,
-customerDelete,
-customerUpdate,
-customerPrint,
-}
+module.exports = {
+  customerAdd,
+  customerDelete,
+  customerUpdate,
+  customerPrint,
+};
