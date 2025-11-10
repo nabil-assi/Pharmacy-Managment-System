@@ -6,6 +6,7 @@ const app = express();
 const session = require("express-session");
 const helmet = require("helmet");
 const errorHandler = require("./middleware/errorHandler");
+
 app.use(helmet());
 app.use(errorHandler);
 dotenv.config();
@@ -35,8 +36,8 @@ app.use(
 const dashboardRoutes = require("./routes/dashboard");
 app.use("/dashboard", dashboardRoutes);
 
-const medicinesRoutes = require("./routes/medicines");
-app.use("/dashboard/medicines", medicinesRoutes);
+const productsRoutes = require("./routes/products");
+app.use("/dashboard/products", productsRoutes);
 
 const customersRoutes = require("./routes/customers");
 app.use("/dashboard/customers", customersRoutes);
@@ -59,8 +60,11 @@ app.use("/dashboard/activity", activityRoutes);
 const loginRoutes = require("./routes/login");
 app.use("/login", loginRoutes);
 
+const pharmacyRoute = require("./routes/pharmacy");
+app.use("/home", pharmacyRoute);
+
 // Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}/login`);
+  console.log(`🚀 Server running on http://localhost:${PORT}/home`);
 });

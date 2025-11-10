@@ -1,19 +1,21 @@
 <!-- Sidebar -->
-<div class="sidebar d-flex flex-column p-3" style="width: 250px;">
-  <h4 class="text-center mb-4">Pharmacy</h4>
+<div class="sidebar d-flex flex-column p-3" style="width: 250px; max-height: 100vh; overflow-y: auto;">
+  
+  <h4 class="text-center mb-4 border-bottom pb-2">Pharmacy</h4>
   <nav class="nav flex-column">
 
     <a class="nav-link <%= url === '/' ? 'active' : '' %>" href="/dashboard">
       <i class="bi bi-house-door me-2"></i> Dashboard
     </a>
 
-    <a class="nav-link <%= url === '/medicines' ? 'active' : '' %>" href="/dashboard/medicines">
-      <i class="bi bi-capsule me-2"></i> Medicines
+    <a class="nav-link <%= url === '/products' ? 'active' : '' %>" href="/dashboard/products">
+      <i class="bi bi-capsule me-2"></i> Products
     </a>
 
     <a class="nav-link <%= url === '/customers' ? 'active' : '' %>" href="/dashboard/customers">
       <i class="bi bi-people me-2"></i> Customers
     </a>
+
     <a class="nav-link <%= url === '/sales' ? 'active' : '' %>" href="/dashboard/sales">
       <i class="bi bi-receipt me-2"></i> Sales
     </a>
@@ -25,19 +27,22 @@
     <a class="nav-link <%= url === '/staff' ? 'active' : '' %>" href="/dashboard/staff">
       <i class="bi bi-person-badge me-2"></i> Staff
     </a>
+
     <a class="nav-link <%= url === '/activity' ? 'active' : '' %>" href="/dashboard/activity">
-      <i class="bi bi-person-badge me-2"></i> Activity Log
+      <i class="bi bi-clock-history me-2"></i> Activity Log
     </a>
 
     <a class="nav-link <%= url === '/settings' ? 'active' : '' %>" href="/dashboard/settings">
       <i class="bi bi-gear me-2"></i> Settings
     </a>
+
     <a class="nav-link <%= url === '/profile' ? 'active' : '' %>" href="/dashboard/profile">
       <i class="bi bi-person-circle me-2"></i> Profile
     </a>
 
     <a class="nav-link" href="/login/logout">
-      <i class="bi bi-person-badge me-2"></i> logout
+      <i class="bi bi-person-badge me-2"></i> Logout
     </a>
+
   </nav>
 </div>

@@ -25,27 +25,46 @@
           </a>
           <ul class="dropdown-menu dropdown-menu-end p-2" style="min-width: 250px;">
             <li class="dropdown-header">Notifications</li>
-            <% if(totalAlerts===0){ %>
-              <li class="dropdown-item text-success">No alerts</li>
+            <% if (totalAlerts===0) { %>
+              <li class="dropdown-item text-muted">
+                ✅ No alerts at the moment
+              </li>
               <% } else { %>
-                <% lowStockAlerts.forEach(item=> { %>
-                  <li class="dropdown-item text-danger">
-                    ⚠️ <%= item.name %> is low: <%= item.quantity %> left
-                  </li>
-                  <% }) %>
-                    <% expiryAlerts.forEach(item=> { %>
-                      <% if(item.expiry_date){ %>
-                        <li class="dropdown-item text-warning">
-                          ⏰ <%= item.name %> expires on <%= new Date(item.expiry_date).toISOString().split('T')[0] %>
-                        </li>
-                        <% } else { %>
-                          <li class="dropdown-item text-warning">
-                            ⏰ <%= item.name %> expiry date not set
-                          </li>
-                          <% } %>
-                            <% }) %>
 
+                <% if (lowStockAlerts.length> 0) { %>
+                  <li>
+                    <hr class="dropdown-divider">
+                  </li>
+                  <li class="dropdown-header text-danger">Low Stock Alerts</li>
+                  <% lowStockAlerts.forEach(item=> { %>
+                    <li class="dropdown-item text-danger">
+                      ⚠️ <strong>
+                        <%= item.name %>
+                      </strong> — only <%= item.quantity %> left
+                    </li>
+                    <% }) %>
+                      <% } %>
+
+                        <% if (expiryAlerts.length> 0) { %>
+                          <li>
+                            <hr class="dropdown-divider">
+                          </li>
+                          <li class="dropdown-header text-warning">Expiry Alerts</li>
+                          <% expiryAlerts.forEach(item=> { %>
+                            <li class="dropdown-item text-warning">
+                              ⏰ <strong>
+                                <%= item.name %>
+                              </strong>
+                              <% if (item.expiry_date) { %>
+                                — expires on <%= new Date(item.expiry_date).toISOString().split('T')[0] %>
+                                  <% } else { %>
+                                    — expiry date not set
+                                    <% } %>
+                            </li>
+                            <% }) %>
                               <% } %>
+
+                                <% } %>
           </ul>
         </li>
 

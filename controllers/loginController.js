@@ -112,12 +112,26 @@ const forgotPasswordPost = async (req, res) => {
     );
     const port = process.env.PORT;
     const resetLink = `http://localhost:${port}/login/reset-password/${token}`;
+
     const html = `
-      <h3>Password Reset Request</h3>
-      <p>Click below to reset your password:</p>
-      <a href="${resetLink}">${resetLink}</a>
-      <p>This link will expire in 1 hour.</p>
-    `;
+  <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9;">
+    <h2 style="color: #2c3e50;">🔐 Password Reset Request</h2>
+    <p>Hello,</p>
+    <p>We received a request to reset your password. Click the button below to proceed:</p>
+    
+    <div style="text-align: center; margin: 20px 0;">
+      <a href="${resetLink}" style="display: inline-block; padding: 12px 24px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 4px;">
+        Reset Password
+      </a>
+    </div>
+
+    <p style="font-size: 0.9rem; color: #555;">If the button doesn't work, copy and paste this link into your browser:</p>
+    <p style="word-break: break-all;"><a href="${resetLink}">${resetLink}</a></p>
+
+    <hr style="margin: 20px 0;">
+    <p style="font-size: 0.85rem; color: #888;">This link will expire in <strong>1 hour</strong>. If you didn't request a password reset, please ignore this email.</p>
+  </div>
+`;
 
     const sent = await sendEmail(email, "Reset your password", html);
 

@@ -11,7 +11,7 @@
                     <thead style="background-color: #f8f9fa; color: #000;">
                         <tr>
                             <th>#</th>
-                            <th>User ID</th>
+                            <th>User</th>
                             <th>Action</th>
                             <th>Entity</th>
                             <th>Entity ID</th>
@@ -29,7 +29,7 @@
                                     <%= index + 1 %>
                                 </td>
                                 <td>
-                                    <%= log.user_id || 'Data Not Available' %>
+                                    <%= log.user_name || 'Data Not Available' %>
                                 </td>
                                 <td>
                                     <%= log.action_type || 'Data Not Available' %>

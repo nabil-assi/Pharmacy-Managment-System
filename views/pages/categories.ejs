@@ -11,7 +11,9 @@
       <thead class="table-success text-dark">
         <tr>
           <th>#</th>
+          <th>Icon</th>
           <th>Name</th>
+          <th>Status</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -19,25 +21,34 @@
         <% for(let i=0; i<categories.length; i++) { %>
         <tr>
           <td><%= i+1 %></td>
+          <td>
+            <% if (categories[i].icon) { %>
+              <img src="<%= categories[i].icon %>" alt="Icon" style="width: 40px; height: 40px; object-fit: cover; border-radius: 6px;">
+            <% } else { %>
+              <span class="text-muted">No Icon</span>
+            <% } %>
+          </td>
           <td><%= categories[i].name %></td>
           <td>
-            <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal"
-              data-bs-target="#editCategoryModal<%= categories[i].id %>">
+            <span class="badge <%= categories[i].is_active == 1 ? 'bg-success' : 'bg-secondary' %>">
+              <%= categories[i].is_active == 1 ? 'Active' : 'Inactive' %>
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal" data-bs-target="#editCategoryModal<%= categories[i].id %>">
               <i class="bi bi-pencil-square"></i>
             </button>
-            <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
-              data-bs-target="#deleteCategoryModal<%= categories[i].id %>">
+            <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal<%= categories[i].id %>">
               <i class="bi bi-trash"></i>
             </button>
           </td>
         </tr>
 
         <!-- Edit Category Modal -->
-        <div class="modal fade" id="editCategoryModal<%= categories[i].id %>" tabindex="-1"
-          aria-labelledby="editCategoryLabel<%= categories[i].id %>" aria-hidden="true">
+        <div class="modal fade" id="editCategoryModal<%= categories[i].id %>" tabindex="-1" aria-labelledby="editCategoryLabel<%= categories[i].id %>" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
-              <form action="/dashboard/categories/update" method="POST">
+              <form action="/dashboard/categories/update" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="id" value="<%= categories[i].id %>">
                 <div class="modal-header bg-primary text-white">
                   <h5 class="modal-title" id="editCategoryLabel<%= categories[i].id %>">Update Category: <%= categories[i].name %></h5>
@@ -45,9 +56,26 @@
                 </div>
                 <div class="modal-body">
                   <div class="mb-3">
-                    <label for="name<%= categories[i].id %>" class="form-label">Category Name</label>
-                    <input type="text" name="name" id="name<%= categories[i].id %>" class="form-control"
-                      value="<%= categories[i].name %>" required>
+                    <label class="form-label">Category Name</label>
+                    <input type="text" name="name" class="form-control" value="<%= categories[i].name %>" required>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea name="description" class="form-control" rows="2"><%= categories[i].description %></textarea>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Status</label>
+                    <select name="is_active" class="form-select">
+                      <option value="1" <%= categories[i].is_active == 1 ? 'selected' : '' %>>Active</option>
+                      <option value="0" <%= categories[i].is_active == 0 ? 'selected' : '' %>>Inactive</option>
+                    </select>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Update Icon (optional)</label>
+                    <input type="file" name="icon" accept="image/*" class="form-control">
+                    <% if (categories[i].icon) { %>
+                      <img src="<%= categories[i].icon %>" alt="Current Icon" class="mt-2" style="width: 60px; border-radius: 6px;">
+                    <% } %>
                   </div>
                 </div>
                 <div class="modal-footer">
@@ -60,8 +88,7 @@
         </div>
 
         <!-- Delete Category Modal -->
-        <div class="modal fade" id="deleteCategoryModal<%= categories[i].id %>" tabindex="-1"
-          aria-labelledby="deleteCategoryLabel<%= categories[i].id %>" aria-hidden="true">
+        <div class="modal fade" id="deleteCategoryModal<%= categories[i].id %>" tabindex="-1" aria-labelledby="deleteCategoryLabel<%= categories[i].id %>" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <form action="/dashboard/categories/delete/<%= categories[i].id %>" method="POST">
@@ -80,7 +107,6 @@
             </div>
           </div>
         </div>
-
         <% } %>
       </tbody>
     </table>
@@ -90,15 +116,30 @@
   <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <form action="/dashboard/categories/add" method="POST">
+        <form action="/dashboard/categories/add" method="POST" enctype="multipart/form-data">
           <div class="modal-header bg-primary text-white">
             <h5 class="modal-title" id="addCategoryLabel">Add New Category</h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <div class="mb-3">
-              <label for="newCategoryName" class="form-label">Category Name</label>
-              <input type="text" name="name" id="newCategoryName" class="form-control" required>
+              <label class="form-label">Category Name</label>
+              <input type="text" name="name" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+              <textarea name="description" class="form-control" rows="2"></textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Status</label>
+              <select name="is_active" class="form-select">
+                <option value="1">Active</option>
+                <option value="0">Inactive</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Icon</label>
+              <input type="file" name="icon" accept="image/*" class="form-control">
             </div>
           </div>
           <div class="modal-footer">
@@ -111,41 +152,3 @@
   </div>
 </div>
 
-<style>
-  .table-responsive {
-    background: #fff;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-  }
-
-  .table-hover tbody tr:hover {
-    background-color: #e6f4ea;
-    transition: 0.2s;
-  }
-
-  .table-success {
-    background: linear-gradient(90deg, #d1fae5, #a7f3d0);
-  }
-
-  .btn-pharma {
-    background: linear-gradient(135deg, #16a34a, #22c55e);
-    color: #fff;
-    font-weight: 600;
-    border: none;
-    transition: 0.3s;
-  }
-
-  .btn-pharma:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(34,197,94,0.4);
-  }
-
-  .modal-header.bg-primary {
-    background: linear-gradient(135deg, #3b82f6, #06b6d4);
-  }
-
-  .modal-header.bg-danger {
-    background: linear-gradient(135deg, #dc2626, #f87171);
-  }
-</style>

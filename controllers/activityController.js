@@ -1,18 +1,22 @@
 const db = require("../config/db");
 const { checkExpiry, checkLowStock } = require("../utils/notification");
-const { timeAgo } = require('../helper/helper');
-
+const { timeAgo } = require("../helper/helper");
 
 const getActivity = async (req, res) => {
   try {
-    const [logs] = await db.query(
-      "SELECT * FROM activity_logs ORDER BY timestamp DESC"
-    );
+    const [logs] = await db.query(`
+  SELECT 
+    activity_logs.*, 
+    staff.name AS user_name 
+  FROM activity_logs 
+  LEFT JOIN staff ON activity_logs.user_id = staff.id 
+  ORDER BY activity_logs.timestamp DESC
+`);
 
-    // enrich logs with timeAgo
     const enrichedLogs = logs.map((log) => ({
       ...log,
       timeAgo: timeAgo(log.timestamp),
+      user_name: log.user_name || "Unknown User",
     }));
 
     const message = req.session.message;
@@ -35,7 +39,7 @@ const getActivity = async (req, res) => {
     console.error("Error loading activity logs:", error);
     res.status(500).send("Server error");
   }
-} 
+};
 module.exports = {
-    getActivity,
-}
+  getActivity,
+};

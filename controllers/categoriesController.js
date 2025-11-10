@@ -1,11 +1,22 @@
 const db = require("../config/db");
 const logActivity = require("../helper/activityLogger");
+const fs = require("fs");
+const path = require("path");
 
 const categoryDelete = async (req, res) => {
-  const categoryId = req.params.id;
+const categoryId = req.params.id;
   const userId = req.session.user?.id;
 
   try {
+    const [rows] = await db.query("SELECT icon FROM categories WHERE id = ?", [
+      categoryId,
+    ]);
+    const iconPath = rows[0]?.icon;
+
+    if (iconPath && fs.existsSync(path.join("public", iconPath))) {
+      fs.unlinkSync(path.join("public", iconPath));
+    }
+
     await db.query(
       "UPDATE medicines SET category_id = NULL WHERE category_id = ?",
       [categoryId]
@@ -25,7 +36,7 @@ const categoryDelete = async (req, res) => {
 
     req.session.message = {
       type: "danger",
-      text: "Category deleted successfully! Values set to NULL.",
+      text: "Category deleted successfully! Icon removed and medicines unlinked.",
     };
     res.redirect("/dashboard/categories");
   } catch (err) {
@@ -35,18 +46,36 @@ const categoryDelete = async (req, res) => {
 };
 
 const categoryUpdate = async (req, res) => {
-  const { id, name } = req.body;
+  const { id, name, description, is_active } = req.body;
   const userId = req.session.user?.id;
 
   try {
-    await db.query("UPDATE categories SET name = ? WHERE id = ?", [name, id]);
+    const [rows] = await db.query("SELECT icon FROM categories WHERE id = ?", [
+      id,
+    ]);
+    const oldIcon = rows[0]?.icon;
+
+    let iconPath = oldIcon;
+
+    if (req.file) {
+      iconPath = "/uploads/icons/" + req.file.filename;
+
+      if (oldIcon && fs.existsSync(path.join("public", oldIcon))) {
+        fs.unlinkSync(path.join("public", oldIcon));
+      }
+    }
+
+    await db.query(
+      `UPDATE categories SET name = ?, description = ?, is_active = ?, icon = ? WHERE id = ?`,
+      [name, description, is_active, iconPath, id]
+    );
 
     await logActivity({
       user_id: userId,
       action_type: "update",
       entity_type: "category",
       entity_id: id,
-      description: `Category with ID ${id} was updated to '${name}'.`,
+      description: `Category updated: ${name} (ID: ${id})`,
       ip_address: req.ip,
       user_agent: req.headers["user-agent"],
     });
@@ -67,11 +96,19 @@ const categoryUpdate = async (req, res) => {
 };
 
 const categoryAdd = async (req, res) => {
-  const { name } = req.body;
+  const { name, description, is_active } = req.body;
   const userId = req.session.user?.id;
 
   try {
-    const [result] = await db.query("INSERT INTO categories (name) VALUES (?)", [name]);
+    let iconPath = null;
+    if (req.file) {
+      iconPath = "/uploads/icons/" + req.file.filename;
+    }
+
+    const [result] = await db.query(
+      `INSERT INTO categories (name, description, is_active, icon) VALUES (?, ?, ?, ?)`,
+      [name, description, is_active, iconPath]
+    );
 
     await logActivity({
       user_id: userId,
@@ -99,4 +136,3 @@ module.exports = {
   categoryUpdate,
   categoryAdd,
 };
-

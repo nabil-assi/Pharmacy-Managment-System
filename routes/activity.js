@@ -5,6 +5,6 @@ const { authMiddleware } = require("../middleware/auth");
 
 
 
-router.get("/", authMiddleware("adminهمه6"),activityController.getActivity );
+router.get("/", authMiddleware("admin"),activityController.getActivity );
 
 module.exports = router;

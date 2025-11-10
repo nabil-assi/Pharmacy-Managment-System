@@ -81,7 +81,7 @@ const medicinePage = async (req, res) => {
       LEFT JOIN categories c ON m.category_id = c.id
     `);
 
-    console.log(medicines);
+    // console.log(medicines);
     const formattedMedicines = medicines.map((med) => ({
       ...med,
       expiry_date_formatted: formatDate(med.expiry_date),

@@ -8,7 +8,7 @@ const {checkExpiry, checkLowStock} = require('../utils/notification');
 
 
 router.get("/", authMiddleware(), dashboardController.mainPage);
-router.get("/medicines", authMiddleware(),dashboardController.medicinePage);
+router.get("/products", authMiddleware(),dashboardController.medicinePage);
 router.get("/customers/:id", authMiddleware(), dashboardController.customerPage);
 router.get("/customers", authMiddleware(), dashboardController.customersPage);
 router.get("/sales", authMiddleware(), dashboardController.salesPage);
