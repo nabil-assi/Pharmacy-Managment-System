@@ -91,14 +91,12 @@
     <div class="col-md-3 col-6">
       <div class="card border-0 shadow-sm h-100 position-relative">
         
-        <!-- شارة الخصم -->
         <% if (hasOffer) { %>
           <span class="badge bg-danger position-absolute top-0 end-0 m-2 px-2 py-1">
             -<%= product.offer %>%
           </span>
         <% } %>
 
-        <!-- صورة المنتج -->
         <img 
           src="<%= product.image ? product.image : 'https://cdn-icons-png.flaticon.com/512/3209/3209959.png' %>" 
           class="card-img-top p-3" 
@@ -106,14 +104,12 @@
           style="height: 180px; object-fit: contain;"
         >
 
-        <!-- تفاصيل المنتج -->
         <div class="card-body text-center">
           <h6 class="fw-bold mb-1"><%= product.name %></h6>
           <p class="small text-muted mb-2">
             <%= product.category_name ? 'Category: ' + product.category_name : '' %>
           </p>
 
-          <!-- السعر -->
           <% if (hasOffer) { %>
             <p class="mb-2">
               <span class="text-danger fw-bold">$<%= discountedPrice.toFixed(2) %></span>

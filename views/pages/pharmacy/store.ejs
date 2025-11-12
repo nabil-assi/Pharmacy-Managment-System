@@ -1,5 +1,6 @@
 <section class="py-5 bg-light">
   <div class="container">
+
     <!-- Header + Filter -->
     <div class="d-flex flex-column flex-lg-row justify-content-between align-items-center mb-5">
       <h2 class="fw-bold text-primary mb-3 mb-lg-0">Our Products</h2>
@@ -14,22 +15,43 @@
     <!-- Product Grid -->
     <div class="row g-4">
       <% products.forEach(product => { %>
-        <div class="col-md-4 col-lg-3">
+        <% 
+          const price = parseFloat(product.price);
+          const hasDiscount = product.discount > 0;
+          const discountedPrice = hasDiscount ? price - (price * product.discount / 100) : price;
+        %>
+
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
           <div class="card h-100 border-0 shadow-sm product-card transition">
             <div class="position-relative">
-              <img src="<%= product.imageUrl %>" class="card-img-top p-3" alt="<%= product.name %>">
-              <% if(product.discount){ %>
+              <img 
+                src="<%= product.image ? product.image : '/images/default-product.png' %>" 
+                class="card-img-top p-3" 
+                alt="<%= product.name %>"
+              >
+              <% if(hasDiscount){ %>
                 <span class="badge bg-danger position-absolute top-0 start-0 m-2 px-3 py-2 shadow-sm">
                   -<%= product.discount %>%
                 </span>
               <% } %>
             </div>
+
             <div class="card-body d-flex flex-column">
               <h6 class="fw-bold text-dark mb-1"><%= product.name %></h6>
-              <p class="small text-muted mb-3"><%= product.description.substring(0, 60) %>...</p>
-              
+              <p class="small text-muted mb-3">
+                <%= (product.description || '').substring(0, 60) %>...
+              </p>
+
               <div class="mt-auto d-flex justify-content-between align-items-center">
-                <p class="fw-bold text-primary mb-0">$<%= product.price.toFixed(2) %></p>
+                <% if(hasDiscount){ %>
+                  <div>
+                    <span class="fw-bold text-primary">$<%= discountedPrice.toFixed(2) %></span>
+                    <span class="text-muted text-decoration-line-through small">$<%= price.toFixed(2) %></span>
+                  </div>
+                <% } else { %>
+                  <p class="fw-bold text-primary mb-0">$<%= price.toFixed(2) %></p>
+                <% } %>
+
                 <a href="/cart/add/<%= product.id %>" class="btn btn-outline-primary btn-sm rounded-pill px-3">
                   <i class="bi bi-bag-plus me-1"></i> Add
                 </a>
@@ -37,12 +59,13 @@
             </div>
           </div>
         </div>
+
       <% }) %>
     </div>
 
     <!-- Pagination -->
     <nav class="mt-5">
-      <ul class="pagination justify-content-center">
+      <ul class="pagination justify-content-center flex-wrap">
         <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
           <a class="page-link rounded-pill" href="?page=<%= currentPage - 1 %>">Previous</a>
         </li>
@@ -56,6 +79,7 @@
         </li>
       </ul>
     </nav>
+
   </div>
 </section>
 
@@ -74,8 +98,10 @@
     box-shadow: 0 1rem 1.5rem rgba(0, 0, 0, 0.1);
   }
   .product-card img {
-    height: 200px;
+    height: 220px;
     object-fit: contain;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
   }
   .pagination .page-link {
     border: none;
@@ -85,5 +111,8 @@
   .pagination .active .page-link {
     background-color: #0d6efd;
     color: white;
+  }
+  .pagination .page-link:hover {
+    background-color: #e9ecef;
   }
 </style>

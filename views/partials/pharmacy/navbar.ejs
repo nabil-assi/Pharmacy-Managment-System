@@ -1,10 +1,11 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3 sticky-top">
   <div class="container">
     <!-- Logo / Brand -->
-    <a class="navbar-brand d-flex align-items-center fw-bold text-primary" href="#">
+    <a class="navbar-brand d-flex align-items-center fw-bold text-primary" href="/home">
       <img src="<%= pharmacy.image %>" alt="Logo" width="35" height="35" class="me-2">
       <span class="fs-4"><%= pharmacy.pharmacy_name %></span>
     </a>
+
     <!-- Toggler for mobile -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
       aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -14,30 +15,37 @@
     <!-- Navbar links -->
     <div class="collapse navbar-collapse" id="mainNavbar">
       <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link <%= url === '/' ? 'nav-link active text-primary fw-semibold' : '' %>" href="/home">Home</a></li>
-        <li class="nav-item"><a class="nav-link <%= url === '/store' ? 'nav-link active text-primary fw-semibold' : '' %>" href="/home/store">Products</a></li>
 
-        <!-- Dropdown for Categories -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle <%= url === '/categories' ? 'nav-link active text-primary fw-semibold' : '' %>" href="/home/categories" id="categoriesDropdown" role="button"
-            data-bs-toggle="dropdown" aria-expanded="false">
-            Categories
-          </a>
-          <ul class="dropdown-menu border-0 shadow-sm <%= url === '/contact' ? 'nav-link active text-primary fw-semibold' : '' %>" aria-labelledby="categoriesDropdown">
-            <li><a class="dropdown-item" href="#">Vitamins & Supplements</a></li>
-            <li><a class="dropdown-item" href="#">Skin Care</a></li>
-            <li><a class="dropdown-item" href="#">Baby Care</a></li>
-            <li><a class="dropdown-item" href="#">Medical Devices</a></li>
-          </ul>
+        <!-- Home -->
+        <li class="nav-item">
+          <a class="nav-link <%= url === '/home' ? 'active text-primary fw-semibold' : '' %>" href="/home">Home</a>
         </li>
 
-        <li class="nav-item"><a class="nav-link <%= url === '/offers' ? 'nav-link active text-primary fw-semibold' : '' %>" href="/home/offers">Offers</a></li>
-        <li class="nav-item"><a class="nav-link <%= url === '/contact' ? 'nav-link active text-primary fw-semibold' : '' %>" href="/home/contact">Contact</a></li>
+        <!-- Products -->
+        <li class="nav-item">
+          <a class="nav-link <%= url === '/store' ? 'active text-primary fw-semibold' : '' %>" href="/home/store">Products</a>
+        </li>
+
+        
+        <!-- Offers -->
+        <li class="nav-item">
+          <a class="nav-link <%= url === '/categories' ? 'active text-primary fw-semibold' : '' %>" href="/home/categories">Categories</a>
+        </li>
+        <!-- Offers -->
+        <li class="nav-item">
+          <a class="nav-link <%= url === '/offers' ? 'active text-primary fw-semibold' : '' %>" href="/home/offers">Offers</a>
+        </li>
+
+        <!-- Contact -->
+        <li class="nav-item">
+          <a class="nav-link <%= url === '/contact' ? 'active text-primary fw-semibold' : '' %>" href="/home/contact">Contact</a>
+        </li>
+
       </ul>
 
       <!-- Search bar -->
-      <form class="d-flex me-lg-3 my-2 my-lg-0" role="search">
-        <input class="form-control rounded-pill me-2" type="search" placeholder="Search medicines..."
+      <form class="d-flex me-lg-3 my-2 my-lg-0" role="search" action="/home/store" method="GET">
+        <input class="form-control rounded-pill me-2" type="search" name="q" placeholder="Search medicines..."
           aria-label="Search">
         <button class="btn btn-primary rounded-pill px-3" type="submit">
           <i class="bi bi-search"></i>
@@ -46,9 +54,11 @@
 
       <!-- Cart + Login -->
       <div class="d-flex align-items-center">
-        <a href="#" class="btn btn-outline-primary rounded-pill me-2 position-relative">
+        <a href="/cart" class="btn btn-outline-primary rounded-pill me-2 position-relative">
           <i class="bi bi-cart3"></i>
-          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">2</span>
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            2
+          </span>
         </a>
         <a href="/login" class="btn btn-primary rounded-pill px-3">
           <i class="bi bi-person"></i> Login
@@ -59,3 +69,18 @@
 </nav>
 
 <!-- Bootstrap Icons CDN -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+<!-- Custom Navbar Styles -->
+<style>
+  .navbar-nav .nav-link.active {
+    font-weight: 600;
+    color: #0d6efd !important;
+  }
+  .dropdown-menu {
+    border-radius: 0.75rem;
+  }
+  .dropdown-item:hover {
+    background-color: #f8f9fa;
+  }
+</style>
