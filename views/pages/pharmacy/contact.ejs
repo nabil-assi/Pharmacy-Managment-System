@@ -1,0 +1,108 @@
+<section class="py-5 bg-light">
+  <div class="container">
+    <!-- Section Header -->
+    <div class="text-center mb-5">
+      <h2 class="fw-bold text-primary mb-2">📞 Contact Us</h2>
+      <p class="text-muted">We’re here to help! Reach out for inquiries, feedback, or support.</p>
+    </div>
+
+    <div class="row g-5 align-items-stretch">
+      <!-- Contact Form -->
+      <div class="col-md-7">
+        <div class="card border-0 shadow-sm rounded-4">
+          <div class="card-body p-4">
+            <h5 class="fw-semibold mb-4 text-primary">Send us a Message</h5>
+            <form action="/contact" method="POST" class="contact-form">
+              <div class="mb-3">
+                <label for="name" class="form-label">Your Name</label>
+                <input type="text" class="form-control form-control-lg" id="name" name="name" required>
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">Your Email</label>
+                <input type="email" class="form-control form-control-lg" id="email" name="email" required>
+              </div>
+              <div class="mb-3">
+                <label for="message" class="form-label">Your Message</label>
+                <textarea class="form-control form-control-lg" id="message" name="message" rows="5" required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill mt-3">
+                <i class="bi bi-send-fill me-2"></i>Send Message
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="col-md-5">
+        <div class="card border-0 shadow-sm rounded-4 h-100 bg-white">
+          <div class="card-body p-4">
+            <h5 class="fw-semibold text-primary mb-4">Get in Touch</h5>
+            <p class="mb-3">
+              <i class="bi bi-geo-alt-fill text-primary me-2"></i>
+              <strong>Address:</strong> Gaza, Palestine
+            </p>
+            <p class="mb-3">
+              <i class="bi bi-telephone-fill text-primary me-2"></i>
+              <strong>Phone:</strong> +970 599 123 456
+            </p>
+            <p class="mb-4">
+              <i class="bi bi-envelope-fill text-primary me-2"></i>
+              <strong>Email:</strong> support@lifepharmacy.com
+            </p>
+
+            <hr>
+
+            <h6 class="fw-semibold text-primary mb-3">🕒 Working Hours</h6>
+            <p class="mb-1">Saturday – Thursday: <strong>8:00 AM – 8:00 PM</strong></p>
+            <p class="mb-0 text-muted">Friday: Closed</p>
+
+            <hr>
+
+            <h6 class="fw-semibold text-primary mb-3">Follow Us</h6>
+            <div class="d-flex gap-3">
+              <a href="#" class="text-primary fs-4"><i class="bi bi-facebook"></i></a>
+              <a href="#" class="text-primary fs-4"><i class="bi bi-instagram"></i></a>
+              <a href="#" class="text-primary fs-4"><i class="bi bi-twitter-x"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+<!-- Custom Styles -->
+<style>
+  .contact-form input,
+  .contact-form textarea {
+    border-radius: 0.75rem;
+    box-shadow: none;
+    border: 1px solid #dee2e6;
+    transition: all 0.2s ease;
+  }
+
+  .contact-form input:focus,
+  .contact-form textarea:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.2);
+  }
+
+  .contact-form button {
+    transition: all 0.3s ease;
+  }
+
+  .contact-form button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(13, 110, 253, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    .contact-form button {
+      font-size: 1rem;
+    }
+  }
+</style>

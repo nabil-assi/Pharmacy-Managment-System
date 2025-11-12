@@ -1,59 +1,61 @@
- <div class="site-navbar py-2">
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3 sticky-top">
+  <div class="container">
+    <!-- Logo / Brand -->
+    <a class="navbar-brand d-flex align-items-center fw-bold text-primary" href="#">
+      <img src="<%= pharmacy.image %>" alt="Logo" width="35" height="35" class="me-2">
+      <span class="fs-4"><%= pharmacy.pharmacy_name %></span>
+    </a>
+    <!-- Toggler for mobile -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+      aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-            <div class="search-wrap">
-                <div class="container">
-                    <a href="#" class="search-close js-search-close"><span class="icon-close2"></span></a>
-                    <form action="#" method="post">
-                        <input type="text" class="form-control" placeholder="Search keyword and hit enter...">
-                    </form>
-                </div>
-            </div>
+    <!-- Navbar links -->
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link <%= url === '/' ? 'nav-link active text-primary fw-semibold' : '' %>" href="/home">Home</a></li>
+        <li class="nav-item"><a class="nav-link <%= url === '/store' ? 'nav-link active text-primary fw-semibold' : '' %>" href="/home/store">Products</a></li>
 
-            <div class="container">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div class="logo">
-                        <div class="site-logo">
-                            <a href="index.html" class="js-logo-clone">Pharma</a>
-                        </div>
-                    </div>
-                    <div class="main-nav d-none d-lg-block">
-                        <nav class="site-navigation text-right text-md-center" role="navigation">
-                            <ul class="site-menu js-clone-nav d-none d-lg-block">
-                                <li class="active"><a href="index.html">Home</a></li>
-                                <li><a href="shop.html">Store</a></li>
-                                <li class="has-children">
-                                    <a href="#">Dropdown</a>
-                                    <ul class="dropdown">
-                                        <li><a href="#">Supplements</a></li>
-                                        <li class="has-children">
-                                            <a href="#">Vitamins</a>
-                                            <ul class="dropdown">
-                                                <li><a href="#">Supplements</a></li>
-                                                <li><a href="#">Vitamins</a></li>
-                                                <li><a href="#">Diet &amp; Nutrition</a></li>
-                                                <li><a href="#">Tea &amp; Coffee</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="#">Diet &amp; Nutrition</a></li>
-                                        <li><a href="#">Tea &amp; Coffee</a></li>
+        <!-- Dropdown for Categories -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle <%= url === '/categories' ? 'nav-link active text-primary fw-semibold' : '' %>" href="/home/categories" id="categoriesDropdown" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Categories
+          </a>
+          <ul class="dropdown-menu border-0 shadow-sm <%= url === '/contact' ? 'nav-link active text-primary fw-semibold' : '' %>" aria-labelledby="categoriesDropdown">
+            <li><a class="dropdown-item" href="#">Vitamins & Supplements</a></li>
+            <li><a class="dropdown-item" href="#">Skin Care</a></li>
+            <li><a class="dropdown-item" href="#">Baby Care</a></li>
+            <li><a class="dropdown-item" href="#">Medical Devices</a></li>
+          </ul>
+        </li>
 
-                                    </ul>
-                                </li>
-                                <li><a href="about.html">About</a></li>
-                                <li><a href="contact.html">Contact</a></li>
-                            </ul>
-                        </nav>
-                    </div>
-                    <div class="icons">
-                        <a href="#" class="icons-btn d-inline-block js-search-open"><span
-                                class="icon-search"></span></a>
-                        <a href="cart.html" class="icons-btn d-inline-block bag">
-                            <span class="icon-shopping-bag"></span>
-                            <span class="number">2</span>
-                        </a>
-                        <a href="#" class="site-menu-toggle js-menu-toggle ml-3 d-inline-block d-lg-none"><span
-                                class="icon-menu"></span></a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <li class="nav-item"><a class="nav-link <%= url === '/offers' ? 'nav-link active text-primary fw-semibold' : '' %>" href="/home/offers">Offers</a></li>
+        <li class="nav-item"><a class="nav-link <%= url === '/contact' ? 'nav-link active text-primary fw-semibold' : '' %>" href="/home/contact">Contact</a></li>
+      </ul>
+
+      <!-- Search bar -->
+      <form class="d-flex me-lg-3 my-2 my-lg-0" role="search">
+        <input class="form-control rounded-pill me-2" type="search" placeholder="Search medicines..."
+          aria-label="Search">
+        <button class="btn btn-primary rounded-pill px-3" type="submit">
+          <i class="bi bi-search"></i>
+        </button>
+      </form>
+
+      <!-- Cart + Login -->
+      <div class="d-flex align-items-center">
+        <a href="#" class="btn btn-outline-primary rounded-pill me-2 position-relative">
+          <i class="bi bi-cart3"></i>
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">2</span>
+        </a>
+        <a href="/login" class="btn btn-primary rounded-pill px-3">
+          <i class="bi bi-person"></i> Login
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Bootstrap Icons CDN -->

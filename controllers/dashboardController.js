@@ -3,6 +3,7 @@ const db = require("../config/db");
 const { formatDate } = require("../utils/helper");
 const { checkExpiry, checkLowStock } = require("../utils/notification");
 const logger = require("../utils/logger");
+const { timeAgo } = require("../helper/helper");
 
 const { getPagination } = require("../helper/pagination");
 
@@ -91,7 +92,7 @@ const medicinePage = async (req, res) => {
     delete req.session.message;
     const expiryAlerts = await checkExpiry();
     const lowStockAlerts = await checkLowStock();
-    
+
     res.render("pages/medicines", {
       medicines: formattedMedicines,
       categories: categories,
@@ -338,6 +339,64 @@ const batchesPage = async (req, res) => {
     res.status(500).json({ error: "Database error" });
   }
 };
+const activityPage = async (req, res) => {
+  try {
+    const [logs] = await db.query(`
+  SELECT 
+    activity_logs.*, 
+    staff.name AS user_name 
+  FROM activity_logs 
+  LEFT JOIN staff ON activity_logs.user_id = staff.id 
+  ORDER BY activity_logs.timestamp DESC
+`);
+
+    const enrichedLogs = logs.map((log) => ({
+      ...log,
+      timeAgo: timeAgo(log.timestamp),
+      user_name: log.user_name || "Unknown User",
+    }));
+
+    const message = req.session.message;
+    delete req.session.message;
+
+    const expiryAlerts = await checkExpiry();
+    const lowStockAlerts = await checkLowStock();
+
+    res.render("pages/activity", {
+      logs: enrichedLogs,
+      title: "Activity Logs",
+      url: req.url,
+      layout: "templates/index",
+      req,
+      message,
+      lowStockAlerts: expiryAlerts,
+      expiryAlerts: lowStockAlerts,
+    });
+  } catch (error) {
+    console.error("Error loading activity logs:", error);
+    res.status(500).send("Server error");
+  }
+};
+const offersPage = async (req, res) => {
+  try {
+    const expiryAlerts = await checkExpiry();
+    const lowStockAlerts = await checkLowStock();
+    const message = req.session.message;
+    delete req.session.message;
+    res.render("pages/offers", {
+      title: "Offers",
+      layout: "templates/index",
+      url: req.url,
+      req,
+      message,
+      lowStockAlerts: lowStockAlerts,
+      expiryAlerts: expiryAlerts,
+    });
+    res.render();
+  } catch (error) {
+    console.log(error);
+  }
+};
 const settingsPage = async (req, res) => {
   try {
     const [rows] = await db.query("SELECT * FROM pharmacy");
@@ -364,12 +423,26 @@ const settingsPage = async (req, res) => {
 };
 const settingsUpdate = async (req, res) => {
   try {
-    const { pharmacy_name, address, phone_number, email, working_hours } =
+    const { id, pharmacy_name, address, phone_number, email, working_hours } =
       req.body;
 
+    const [rows] = await db.query("SELECT image FROM pharmacy WHERE id = ?", [
+      id,
+    ]);
+    const oldImage = rows[0]?.image;
+
+    let imageUrl = oldImage;
+    if (req.file) {
+      imageUrl = "/uploads/pharmacy/" + req.file.filename;
+
+      if (oldImage && fs.existsSync("public" + oldImage)) {
+        fs.unlinkSync("public" + oldImage);
+      }
+    }
+
     await db.query(
-      "UPDATE pharmacy SET pharmacy_name=?, address=?, phone_number=?, email=?, working_hours=?",
-      [pharmacy_name, address, phone_number, email, working_hours]
+      "UPDATE pharmacy SET pharmacy_name=?, address=?, phone_number=?, email=?, working_hours=?, image=?",
+      [pharmacy_name, address, phone_number, email, working_hours, imageUrl]
     );
 
     req.session.message = {
@@ -456,6 +529,8 @@ module.exports = {
   batchesPage,
   settingsPage,
   settingsUpdate,
+  offersPage,
+  activityPage,
   profilePage,
   profileUpdate,
 };

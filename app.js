@@ -63,6 +63,9 @@ app.use("/login", loginRoutes);
 const pharmacyRoute = require("./routes/pharmacy");
 app.use("/home", pharmacyRoute);
 
+const offersRoute = require("./routes/offers");
+app.use("/dashboard/offers", offersRoute);
+
 // Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
