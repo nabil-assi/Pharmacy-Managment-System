@@ -1,0 +1,90 @@
+<!-- Product Detail Page -->
+<section class="py-5">
+  <div class="container">
+    <div class="row">
+      <!-- Product Images -->
+      <div class="col-md-6">
+        <img src="<%= product.image ? product.image : 'https://cdn-icons-png.flaticon.com/512/3209/3209959.png' %>"
+          class="img-fluid rounded shadow-sm mb-3" alt="<%= product.name %>">
+      </div>
+
+      <!-- Product Info -->
+      <div class="col-md-6">
+        <h1 class="fw-bold text-primary mb-3">
+          <%= product.name %>
+        </h1>
+        <p class="text-muted mb-2">
+          Category: <%= product.category_name ? product.category_name : 'General' %>
+        </p>
+        <% const price=parseFloat(product.price); const hasOffer=product.offer> 0;
+          const discountedPrice = hasOffer ? price - (price * product.offer / 100) : price;
+          %>
+          <p class="fs-4 fw-bold mb-3">
+            <% if(hasOffer) { %>
+              <span class="text-danger">$<%= discountedPrice.toFixed(2) %></span>
+              <span class="text-muted text-decoration-line-through small">$<%= price.toFixed(2) %></span>
+              <% } else { %>
+                $<%= price.toFixed(2) %>
+                  <% } %>
+          </p>
+
+          <p class="mb-4">
+            <%= product.description || 'No description available for this product.' %>
+          </p>
+
+          <!-- Quantity & Add to Cart -->
+          <form action="/home/cart/add/<%= product.id %>" method="POST" class="d-flex align-items-center mb-4">
+              <input type="hidden" name="redirect" value="<%= req.originalUrl %>">
+
+            <input type="number" name="quantity" value="1" min="1" class="form-control me-3" style="width: 100px;">
+            <button type="submit" class="btn btn-primary btn-lg rounded-pill px-4">
+              <i class="bi bi-cart me-2"></i> Add to Cart
+            </button>
+          </form>
+
+          <!-- Call to Action for Support -->
+          <p>Need advice? <a href="/home/contact" class="text-primary fw-semibold">Contact a pharmacist</a></p>
+      </div>
+    </div>
+
+    <!-- Related Products (Optional) -->
+    <div class="mt-5">
+      <h3 class="fw-bold text-primary mb-4">You may also like</h3>
+      <div class="row g-4">
+        <% relatedProducts.forEach(rp=> { %>
+          <div class="col-md-3 col-6">
+            <div class="card border-0 shadow-sm h-100 hover-scale">
+              <img src="<%= rp.image %>" class="card-img-top p-3" alt="<%= rp.name %>"
+                style="height: 180px; object-fit: contain;">
+              <div class="card-body text-center">
+                <h6 class="fw-bold mb-1">
+                  <%= rp.name %>
+                </h6>
+                <p class="small text-muted mb-2">$<%= parseFloat(rp.price).toFixed(2) %>
+                </p>
+                <a href="/product/<%= rp.id %>" class="btn btn-outline-primary btn-sm rounded-pill px-3">Details</a>
+              </div>
+            </div>
+          </div>
+          <% }) %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Optional Custom CSS -->
+<style>
+  .hover-scale {
+    transition: all 0.3s ease;
+    border-radius: 1rem;
+  }
+
+  .hover-scale:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 1rem 1.5rem rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-lg {
+    font-weight: 600;
+  }
+</style>

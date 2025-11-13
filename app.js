@@ -6,7 +6,8 @@ const app = express();
 const session = require("express-session");
 const helmet = require("helmet");
 const errorHandler = require("./middleware/errorHandler");
-
+const navbarData = require('./middleware/navbarData');
+ 
 app.use(helmet());
 app.use(errorHandler);
 dotenv.config();
@@ -22,6 +23,10 @@ app.use(expressLayouts);
 // Static files
 app.use(express.static(path.join(__dirname, "public")));
 
+//user
+//flash-messages
+//cart
+
 app.use(
   session({
     secret: process.env.JWT_SECRET,
@@ -30,6 +35,16 @@ app.use(
     cookie: { maxAge: 1000 * 60 * 60 },
   })
 );
+app.use((req, res, next) => {
+  if (!req.session.cart) req.session.cart = [];
+  if (!req.session.message) req.session.message = null;
+  res.locals.session = req.session;
+  next();
+});
+
+app.use(navbarData);
+
+
 
 // Routes
 // Controllers

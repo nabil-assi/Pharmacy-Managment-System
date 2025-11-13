@@ -1,0 +1,92 @@
+<!-- Category Header -->
+<section class="py-5 bg-light">
+  <div class="container text-center">
+    <h1 class="fw-bold text-primary mb-3"><%= category.name %></h1>
+    <% if(category.description){ %>
+      <p class="lead text-muted"><%= category.description %></p>
+    <% } %>
+  </div>
+</section>
+
+<!-- Category Products -->
+<section class="py-5">
+  <div class="container">
+    <h3 class="fw-bold text-primary mb-4">Products in <%= category.name %></h3>
+
+    <div class="row g-4">
+      <% if(products.length > 0){ %>
+        <% products.forEach(product => { %>
+          <% 
+            const price = parseFloat(product.price);
+            const hasDiscount = product.offer > 0;
+            const discountedPrice = hasDiscount ? price - (price * product.offer / 100) : price;
+          %>
+
+          <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm product-card transition">
+              <!-- Product Image -->
+              <div class="position-relative">
+                <img src="<%= product.image ? product.image : '/images/default-product.png' %>" 
+                     class="card-img-top p-3" 
+                     alt="<%= product.name %>" 
+                     style="height: 220px; object-fit: contain; background-color: #f8f9fa; border-bottom: 1px solid #e9ecef;">
+                <% if(hasDiscount){ %>
+                  <span class="badge bg-danger position-absolute top-0 start-0 m-2 px-3 py-2 shadow-sm">
+                    -<%= product.offer %>%
+                  </span>
+                <% } %>
+              </div>
+
+              <!-- Product Info -->
+              <div class="card-body d-flex flex-column">
+                <h6 class="fw-bold text-dark mb-1"><%= product.name %></h6>
+                <p class="small text-muted mb-2"><%= (product.description || '' ).substring(0, 60) %>...</p>
+
+                <div class="mt-auto d-flex flex-column gap-2">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <% if(hasDiscount){ %>
+                      <div>
+                        <span class="fw-bold text-primary">$<%= discountedPrice.toFixed(2) %></span>
+                        <span class="text-muted text-decoration-line-through small">$<%= price.toFixed(2) %></span>
+                      </div>
+                    <% } else { %>
+                      <span class="fw-bold text-primary">$<%= price.toFixed(2) %></span>
+                    <% } %>
+                  </div>
+
+                  <!-- Buttons -->
+                  <div class="d-flex gap-2">
+                    <a href="/cart/add/<%= product.id %>" class="btn btn-outline-primary btn-sm flex-fill rounded-pill">
+                      <i class="bi bi-bag-plus me-1"></i> Add
+                    </a>
+                    <a href="/product?id=<%= product.id %>" class="btn btn-primary btn-sm flex-fill rounded-pill">
+                      <i class="bi bi-eye me-1"></i> Details
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        <% }) %>
+      <% } else { %>
+        <p class="text-center text-muted">No products available in this category.</p>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<!-- Custom CSS -->
+<style>
+  .product-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+    border-radius: 1rem;
+  }
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 1.25rem 1.5rem rgba(0,0,0,0.1);
+  }
+  .btn-sm {
+    font-weight: 600;
+  }
+</style>

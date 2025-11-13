@@ -1,69 +1,54 @@
 <!-- Hero Section -->
-<section class="bg-white text-center py-5">
-  <div class="container py-4">
-    <div class="row align-items-center">
-      <div class="col-lg-6 mb-4 mb-lg-0 text-lg-start">
-        <h1 class="display-5 fw-bold text-primary mb-3">
-          Welcome to <%= pharmacy.pharmacy_name %>
-        </h1>
-        <p class="lead text-muted mb-4">
-          Reliable medicines, health essentials, and expert advice — all in one trusted pharmacy.
-        </p>
-        <a href="/home/store" class="btn btn-primary btn-lg rounded-pill px-4 me-2">
-          <i class="bi bi-capsule me-2"></i>Shop Medicines
-        </a>
-        <a href="/home/contact" class="btn btn-outline-primary btn-lg rounded-pill px-4">
-          <i class="bi bi-chat-dots me-2"></i>Get Support with AI
-        </a>
-      </div>
-      <div class="col-lg-6 text-center">
-        <img src="<%= pharmacy.image %>" alt="Pharmacy" class="img-fluid" style="max-height: 300px;">
-      </div>
-    </div>
+<section class="hero-section d-flex align-items-center justify-content-center text-center"
+  style="background: linear-gradient(135deg, #c3e0ff, #ffffff); min-height: 70vh; position: relative;">
+  <!-- Optional background pharmacy illustration -->
+  <img src="../../../images/pharmacyBG.jpg" alt="Pharmacy Background"
+    style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); opacity: 0.3; max-width: 80%;">
+
+  <div class="container position-relative">
+    <h1 class="display-4 fw-bold text-primary mb-3">
+      Welcome to Santa-Marina (SM)
+    </h1>
+    <p class="lead text-muted mb-4">
+      Reliable medicines, health essentials, and expert advice — all in one trusted pharmacy.
+    </p>
+    <a href="/home/store" class="btn btn-primary btn-lg rounded-pill px-4 me-2 shadow-sm">
+      <i class="bi bi-capsule me-2"></i> Shop Medicines
+    </a>
+    <a href="/home/contact" class="btn btn-outline-primary btn-lg rounded-pill px-4 shadow-sm">
+      <i class="bi bi-chat-dots me-2"></i> Get Support with AI
+    </a>
   </div>
 </section>
+
+
 
 <!-- Key Benefits Section -->
 <section class="py-5 bg-light">
   <div class="container text-center">
     <h2 class="fw-bold text-primary mb-5">Why Choose Us?</h2>
     <div class="row g-4">
-      <div class="col-md-3">
-        <div class="card border-0 shadow-sm h-100">
-          <div class="card-body py-4">
-            <i class="bi bi-truck fs-1 text-primary mb-3"></i>
-            <h6 class="fw-bold">Fast Delivery</h6>
-            <p class="text-muted small mb-0">Get your medicines delivered safely and quickly.</p>
+      <% const benefits=[ { icon: 'bi-truck' , title: 'Fast Delivery' ,
+        text: 'Get your medicines delivered safely and quickly.' }, { icon: 'bi-shield-check' ,
+        title: 'Trusted Products' , text: 'We source only from certified and verified suppliers.' }, {
+        icon: 'bi-heart-pulse' , title: 'Professional Care' , text: 'Our pharmacists are ready to help you anytime.' },
+        { icon: 'bi-percent' , title: 'Exclusive Offers' , text: 'Enjoy regular discounts and loyalty rewards.' } ]; %>
+
+        <% benefits.forEach(b=> { %>
+          <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100 hover-scale transition">
+              <div class="card-body py-5">
+                <i class="bi <%= b.icon %> fs-1 text-primary mb-3"></i>
+                <h5 class="fw-bold mb-2">
+                  <%= b.title %>
+                </h5>
+                <p class="text-muted small mb-0">
+                  <%= b.text %>
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card border-0 shadow-sm h-100">
-          <div class="card-body py-4">
-            <i class="bi bi-shield-check fs-1 text-primary mb-3"></i>
-            <h6 class="fw-bold">Trusted Products</h6>
-            <p class="text-muted small mb-0">We source only from certified and verified suppliers.</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card border-0 shadow-sm h-100">
-          <div class="card-body py-4">
-            <i class="bi bi-heart-pulse fs-1 text-primary mb-3"></i>
-            <h6 class="fw-bold">Professional Care</h6>
-            <p class="text-muted small mb-0">Our pharmacists are ready to help you anytime.</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card border-0 shadow-sm h-100">
-          <div class="card-body py-4">
-            <i class="bi bi-percent fs-1 text-primary mb-3"></i>
-            <h6 class="fw-bold">Exclusive Offers</h6>
-            <p class="text-muted small mb-0">Enjoy regular discounts and loyalty rewards.</p>
-          </div>
-        </div>
-      </div>
+          <% }) %>
     </div>
   </div>
 </section>
@@ -73,62 +58,56 @@
   <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h2 class="fw-bold text-primary mb-0">Popular Offers</h2>
-      <a href="/medicines" class="text-decoration-none fw-semibold text-primary">
+      <a href="/home/store" class="text-decoration-none fw-semibold text-primary">
         View All <i class="bi bi-arrow-right-circle ms-1"></i>
       </a>
     </div>
+
     <div class="row g-4">
-
-
-    <div class="row g-3">
-  <% products.forEach(product => { %>
-    <% 
-      const price = parseFloat(product.price); // تحويل السعر مرة واحدة
-      const hasOffer = product.offer > 0;
-      const discountedPrice = hasOffer ? price - (price * product.offer / 100) : price;
-    %>
-
-    <div class="col-md-3 col-6">
-      <div class="card border-0 shadow-sm h-100 position-relative">
-        
-        <% if (hasOffer) { %>
-          <span class="badge bg-danger position-absolute top-0 end-0 m-2 px-2 py-1">
-            -<%= product.offer %>%
-          </span>
-        <% } %>
-
-        <img 
-          src="<%= product.image ? product.image : 'https://cdn-icons-png.flaticon.com/512/3209/3209959.png' %>" 
-          class="card-img-top p-3" 
-          alt="<%= product.name %>"
-          style="height: 180px; object-fit: contain;"
-        >
-
-        <div class="card-body text-center">
-          <h6 class="fw-bold mb-1"><%= product.name %></h6>
-          <p class="small text-muted mb-2">
-            <%= product.category_name ? 'Category: ' + product.category_name : '' %>
-          </p>
-
-          <% if (hasOffer) { %>
-            <p class="mb-2">
-              <span class="text-danger fw-bold">$<%= discountedPrice.toFixed(2) %></span>
-              <span class="text-muted text-decoration-line-through small">$<%= price.toFixed(2) %></span>
-            </p>
-          <% } else { %>
-            <p class="mb-2 fw-bold">$<%= price.toFixed(2) %></p>
-          <% } %>
-
-          <a href="/product/<%= product.id %>" class="btn btn-outline-primary btn-sm rounded-pill px-3">
-            Details
-          </a>
-        </div>
-      </div>
+      <% if(products && products.length> 0) { %>
+        <% products.forEach(product=> { %>
+          <% const price=parseFloat(product.price); const hasOffer=product.offer> 0;
+            const discountedPrice = hasOffer ? price - (price * product.offer / 100) : price;
+            %>
+            <div class="col-md-3 col-6">
+              <div class="card border-0 shadow-sm h-100 hover-scale position-relative">
+                <% if(hasOffer) { %>
+                  <span class="badge bg-danger position-absolute top-0 end-0 m-2 px-2 py-1 rounded-pill fw-semibold">
+                    -<%= product.offer %>%
+                  </span>
+                  <% } %>
+                    <img
+                      src="<%= product.image ? product.image : 'https://cdn-icons-png.flaticon.com/512/3209/3209959.png' %>"
+                      class="card-img-top p-3" alt="<%= product.name %>" style="height: 180px; object-fit: contain;">
+                    <div class="card-body text-center">
+                      <h6 class="fw-bold mb-1">
+                        <%= product.name %>
+                      </h6>
+                      <p class="small text-muted mb-2">
+                        <%= product.category_name ? 'Category: ' + product.category_name : '' %>
+                      </p>
+                      <% if(hasOffer) { %>
+                        <p class="mb-2">
+                          <span class="text-danger fw-bold">$<%= discountedPrice.toFixed(2) %></span>
+                          <span class="text-muted text-decoration-line-through small">$<%= price.toFixed(2) %></span>
+                        </p>
+                        <% } else { %>
+                          <p class="mb-2 fw-bold">$<%= price.toFixed(2) %>
+                          </p>
+                          <% } %>
+                            <a href="/home/product/<%= product.id %>"
+                              class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                              Details
+                            </a>
+                    </div>
+              </div>
+            </div>
+            <% }) %>
+              <% } else { %>
+                <p class="text-muted text-center">No products available.</p>
+                <% } %>
     </div>
-  <% }); %>
-</div>
-
-
+  </div>
 </section>
 
 <!-- Call to Action -->
@@ -136,8 +115,53 @@
   <div class="container">
     <h3 class="fw-bold mb-3">Need personal advice?</h3>
     <p class="mb-4">Talk to our licensed pharmacists — we're here to help you choose the right treatment.</p>
-    <a href="/home/contact" class="btn btn-light btn-lg rounded-pill px-4">
-      <i class="bi bi-telephone me-2"></i>Contact a Pharmacist
+    <a href="/home/contact" class="btn btn-light btn-lg rounded-pill px-4 shadow-sm">
+      <i class="bi bi-telephone me-2"></i> Contact a Pharmacist
     </a>
   </div>
 </section>
+
+<!-- Custom CSS -->
+<style>
+  .hover-scale {
+    transition: all 0.3s ease;
+    border-radius: 1rem;
+  }
+
+  .hover-scale:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 1rem 1.5rem rgba(0, 0, 0, 0.1);
+  }
+
+  .card-img-top {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+  }
+
+  .btn-lg {
+    font-weight: 600;
+  }
+
+  .hero-section {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-section h1 {
+    font-size: 3rem;
+  }
+
+  .hero-section p {
+    font-size: 1.25rem;
+  }
+
+  @media (max-width: 768px) {
+    .hero-section h1 {
+      font-size: 2.25rem;
+    }
+
+    .hero-section p {
+      font-size: 1rem;
+    }
+  }
+</style>

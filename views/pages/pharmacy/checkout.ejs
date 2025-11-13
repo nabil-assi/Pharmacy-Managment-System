@@ -1,0 +1,45 @@
+<section class="py-5">
+  <div class="container">
+    <h2 class="fw-bold mb-4">Checkout</h2>
+
+    <% if(cart.length > 0){ %>
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% cart.forEach(item => { %>
+            <tr>
+              <td>
+                <img src="<%= item.image ? item.image : '/images/default-product.png' %>" 
+                     alt="<%= item.name %>" width="50" height="50" class="me-2">
+                <%= item.name %>
+              </td>
+              <td>$<%= item.price %></td>
+              <td><%= item.quantity %></td>
+              <td>$<%= item.subtotal %></td>
+            </tr>
+          <% }) %>
+          <tr>
+            <td colspan="3" class="text-end fw-bold">Total:</td>
+            <td class="fw-bold">$<%= total %></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="text-end mt-4">
+        <a href="/home/store" class="btn btn-outline-secondary me-2">Continue Shopping</a>
+        <a href="/home/checkout/confirm" class="btn btn-primary">Confirm Order</a>
+      </div>
+
+    <% } else { %>
+      <p class="text-center text-muted">Your cart is empty.</p>
+      <a href="/home/store" class="btn btn-primary d-block mx-auto mt-3">Go to Store</a>
+    <% } %>
+  </div>
+</section>

@@ -3,65 +3,82 @@
 
     <!-- Header + Filter -->
     <div class="d-flex flex-column flex-lg-row justify-content-between align-items-center mb-5">
-      <h2 class="fw-bold text-primary mb-3 mb-lg-0">Our Products</h2>
+      <h2 class="fw-bold text-primary mb-3 mb-lg-0">
+        <%= searchQuery ? "Search Result" : "Our Products" %>
+      </h2>
+
       <form class="d-flex" action="/medicines" method="GET" style="max-width: 400px;">
-        <input class="form-control me-2 rounded-pill" type="search" name="q" placeholder="Search for a medicine..." aria-label="Search">
+        <input class="form-control me-2 rounded-pill" type="search" name="q" placeholder="Search for a medicine..."
+          aria-label="Search">
         <button class="btn btn-primary rounded-pill px-4" type="submit">
           <i class="bi bi-search"></i>
         </button>
       </form>
     </div>
 
-    <!-- Product Grid -->
     <div class="row g-4">
-      <% products.forEach(product => { %>
-        <% 
-          const price = parseFloat(product.price);
-          const hasDiscount = product.discount > 0;
+      <% products.forEach(product=> { %>
+        <% const price=parseFloat(product.price); const hasDiscount=product.discount> 0;
           const discountedPrice = hasDiscount ? price - (price * product.discount / 100) : price;
-        %>
+          %>
 
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-          <div class="card h-100 border-0 shadow-sm product-card transition">
-            <div class="position-relative">
-              <img 
-                src="<%= product.image ? product.image : '/images/default-product.png' %>" 
-                class="card-img-top p-3" 
-                alt="<%= product.name %>"
-              >
-              <% if(hasDiscount){ %>
-                <span class="badge bg-danger position-absolute top-0 start-0 m-2 px-3 py-2 shadow-sm">
-                  -<%= product.discount %>%
-                </span>
-              <% } %>
-            </div>
-
-            <div class="card-body d-flex flex-column">
-              <h6 class="fw-bold text-dark mb-1"><%= product.name %></h6>
-              <p class="small text-muted mb-3">
-                <%= (product.description || '').substring(0, 60) %>...
-              </p>
-
-              <div class="mt-auto d-flex justify-content-between align-items-center">
+          <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm product-card transition">
+              <!-- Product Image -->
+              <div class="position-relative">
+                <img src="<%= product.image ? product.image : '/images/default-product.png' %>" class="card-img-top p-3"
+                  alt="<%= product.name %>"
+                  style="height: 220px; object-fit: contain; background-color: #f8f9fa; border-bottom: 1px solid #e9ecef;">
                 <% if(hasDiscount){ %>
-                  <div>
-                    <span class="fw-bold text-primary">$<%= discountedPrice.toFixed(2) %></span>
-                    <span class="text-muted text-decoration-line-through small">$<%= price.toFixed(2) %></span>
-                  </div>
-                <% } else { %>
-                  <p class="fw-bold text-primary mb-0">$<%= price.toFixed(2) %></p>
-                <% } %>
+                  <span class="badge bg-danger position-absolute top-0 start-0 m-2 px-3 py-2 shadow-sm">
+                    -<%= product.discount %>%
+                  </span>
+                  <% } %>
+              </div>
 
-                <a href="/cart/add/<%= product.id %>" class="btn btn-outline-primary btn-sm rounded-pill px-3">
-                  <i class="bi bi-bag-plus me-1"></i> Add
-                </a>
+              <!-- Product Info -->
+              <div class="card-body d-flex flex-column">
+                <h6 class="fw-bold text-dark mb-1">
+                  <%= product.name %>
+                </h6>
+                <% if(product.category_name){ %>
+                  <p class="small text-secondary mb-2">
+                    <%= product.category_name %>
+                  </p>
+                  <% } %>
+                    <p class="small text-muted mb-3">
+                      <%= (product.description || '' ).substring(0, 60) %>...
+                    </p>
+
+                    <!-- Price & Buttons -->
+                    <div class="mt-auto d-flex flex-column gap-2">
+                      <div class="d-flex justify-content-between align-items-center mb-2">
+                        <% if(hasDiscount){ %>
+                          <div>
+                            <span class="fw-bold text-primary">$<%= discountedPrice.toFixed(2) %></span>
+                            <span class="text-muted text-decoration-line-through small">$<%= price.toFixed(2) %></span>
+                          </div>
+                          <% } else { %>
+                            <span class="fw-bold text-primary">$<%= price.toFixed(2) %></span>
+                            <% } %>
+                      </div>
+
+                      <!-- Buttons -->
+                      <div class="d-flex gap-2">
+
+                        <a href="/home/product/<%= product.id %>" class="btn btn-primary btn-sm flex-fill rounded-pill">
+                          <i class="bi bi-eye me-1"></i> Details
+                        </a>
+                      </div>
+                    </div>
               </div>
             </div>
           </div>
-        </div>
 
-      <% }) %>
+          <% }) %>
     </div>
+
+
 
     <!-- Pagination -->
     <nav class="mt-5">
@@ -69,14 +86,16 @@
         <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
           <a class="page-link rounded-pill" href="?page=<%= currentPage - 1 %>">Previous</a>
         </li>
-        <% for(let i = 1; i <= totalPages; i++) { %>
+        <% for(let i=1; i <=totalPages; i++) { %>
           <li class="page-item <%= currentPage === i ? 'active' : '' %>">
-            <a class="page-link rounded-pill" href="?page=<%= i %>"><%= i %></a>
+            <a class="page-link rounded-pill" href="?page=<%= i %>">
+              <%= i %>
+            </a>
           </li>
-        <% } %>
-        <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
-          <a class="page-link rounded-pill" href="?page=<%= currentPage + 1 %>">Next</a>
-        </li>
+          <% } %>
+            <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+              <a class="page-link rounded-pill" href="?page=<%= currentPage + 1 %>">Next</a>
+            </li>
       </ul>
     </nav>
 
@@ -89,29 +108,39 @@
 <!-- Custom Styles -->
 <style>
   .product-card {
-    transition: all 0.3s ease;
+    transition: transform 0.3s, box-shadow 0.3s;
     border-radius: 1rem;
-    overflow: hidden;
   }
+
   .product-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 1rem 1.5rem rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+    box-shadow: 0 1.25rem 1.5rem rgba(0, 0, 0, 0.1);
   }
+
+  .btn-sm {
+    font-weight: 600;
+  }
+
+
+
   .product-card img {
     height: 220px;
     object-fit: contain;
     background-color: #f8f9fa;
     border-bottom: 1px solid #e9ecef;
   }
+
   .pagination .page-link {
     border: none;
     color: #0d6efd;
     margin: 0 3px;
   }
+
   .pagination .active .page-link {
     background-color: #0d6efd;
     color: white;
   }
+
   .pagination .page-link:hover {
     background-color: #e9ecef;
   }
