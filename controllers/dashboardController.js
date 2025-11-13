@@ -379,24 +379,55 @@ const activityPage = async (req, res) => {
 };
 const offersPage = async (req, res) => {
   try {
+    const [offers] = await db.query("SELECT * FROM medicines WHERE offer > 0");
+    console.log(offers)
     const expiryAlerts = await checkExpiry();
     const lowStockAlerts = await checkLowStock();
+
     const message = req.session.message;
     delete req.session.message;
+
     res.render("pages/offers", {
       title: "Offers",
       layout: "templates/index",
       url: req.url,
       req,
+      offers,
       message,
-      lowStockAlerts: lowStockAlerts,
-      expiryAlerts: expiryAlerts,
+      lowStockAlerts,
+      expiryAlerts,
     });
-    res.render();
   } catch (error) {
     console.log(error);
+    res.status(500).send("Server Error");
   }
 };
+const offerUpdate = async (req, res) => {
+  try {
+    let { offer, id } = req.body;
+
+    const offerNum = parseFloat(offer) || 0;
+    const idNum = parseInt(id);
+
+    await db.query('UPDATE medicines SET offer = ? WHERE id = ?', [offerNum, idNum]);
+
+    req.session.message = {
+      type: "success",
+      text: "Updated product offer successfully!",
+    };
+
+    res.redirect('/dashboard/offers');
+  } catch (error) {
+    console.error("Error updating offer:", error);
+    req.session.message = {
+      type: "danger",
+      text: "Failed to update product offer. Please try again.",
+    };
+    res.redirect('/dashboard/products');
+  }
+};
+
+
 const settingsPage = async (req, res) => {
   try {
     const [rows] = await db.query("SELECT * FROM pharmacy");
@@ -533,4 +564,5 @@ module.exports = {
   activityPage,
   profilePage,
   profileUpdate,
+  offerUpdate,
 };

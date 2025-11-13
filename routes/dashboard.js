@@ -37,6 +37,7 @@ router.get("/batches", authMiddleware(), dashboardController.batchesPage);
 
 router.get("/activity", authMiddleware(), dashboardController.activityPage);
 router.get("/offers", authMiddleware(), dashboardController.offersPage);
+router.post("/offers/update", authMiddleware("admin"), dashboardController.offerUpdate);
 
 router.get(
   "/settings",

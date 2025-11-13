@@ -43,7 +43,7 @@ const productAdd = async (req, res) => {
 };
 
 const productUpdate = async (req, res) => {
-  const { id, name, category_id, price, quantity, expiry_date } = req.body;
+  const { id, name, category_id, price, quantity, expiry_date, offer } = req.body;
 
   try {
     const [rows] = await db.query("SELECT image FROM medicines WHERE id = ?", [
@@ -61,12 +61,13 @@ const productUpdate = async (req, res) => {
       }
     }
 
-    await db.query(
-      `UPDATE medicines 
-       SET name = ?, category_id = ?, price = ?, quantity = ?, expiry_date = ?, image = ?
-       WHERE id = ?`,
-      [name, category_id, price, quantity, expiry_date, imageUrl, id]
-    );
+await db.query(
+  `UPDATE medicines 
+   SET name = ?, category_id = ?, price = ?, quantity = ?, expiry_date = ?, image = ?, offer = ?
+   WHERE id = ?`,
+  [name, category_id, price, quantity, expiry_date, imageUrl, offer, id]
+);
+
 
     req.session.message = {
       type: "success",
